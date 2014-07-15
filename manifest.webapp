@@ -1,5 +1,5 @@
 {
-  "name": "Firefox-OS-News-Reader",
+  "name": "firefox-os-news-reader",
   "type": "certified",
   "description": "FFOS News Reader",
   "launch_path": "/index.html",
@@ -7,7 +7,7 @@
     "128": "/images/icon-128.png"
   },
   "developer": {
-    "name": "Capstone Team D",
+    "name": "Capstone Team D"
   },
   "permissions": {
     "networkstats-manage": {
