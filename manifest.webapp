@@ -1,7 +1,7 @@
 {
-  "name": "firefox-os-news-reader",
+  "name": "muze",
   "type": "certified",
-  "description": "FFOS News Reader",
+  "description": "Muze News Reader",
   "launch_path": "/index.html",
   "icons": {
     "128": "/images/icon-128.png"

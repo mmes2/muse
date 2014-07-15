@@ -1,6 +1,3 @@
-
-
-
   var ns1 = document.getElementById('ns1');
   var ns2 = document.getElementById('ns2');
   var ns3 = document.getElementById('ns3');
@@ -17,9 +14,9 @@
 
 function activate(PriorityLevel) {
 
-  localforage.clear(function(){});
+  //localforage.clear(function(){});
   var rate = 900000;  //calculated based on priority, this would be 3 (15 minutes)
-  //navigator.mozNetworkStats.sampleRate = rate;  //chunk of time we want to record sent / recieved data
+  //navigator.mozNetworkStats.sampleRate = rate;  //chunk of time we want to record sent / received data
 
 //var manageWifi   = navigator.mozNetworkStats.connectionTypes.indexOf('wifi')   > -1;
 //var manageMobile = navigator.mozNetworkStats.connectionTypes.indexOf('mobile') > -1;
@@ -63,20 +60,8 @@ function activate(PriorityLevel) {
    ns2.innerHTML = "no mozNetworkStats";
  }
 
-// var fakeRecord = { Interval:"1 1:30", Name: "wifinetwork", 
-//                    ConnectionType: "wfifi", Metered: false, Bandwidth: 2939, 
-//                    SignalStrength: 25, DataRecieved: 444, DataSent: 535};
-
-//  addRecord(fakeRecord);
-//  fakeRecord = { Interval:"1 1:30", Name: "belkin", 
-//                    ConnectionType: "wfifi", Metered: false, Bandwidth: 2939, 
-//                    SignalStrength: 25, DataRecieved: 444, DataSent: 535};
-
-//  addRecord(fakeRecord);
-//collectNetworkStats();
   
-  generateFakeDay(7, 1);
-//  printDay(4);
+  //generateFakeDay(7, 8);
 
   var d = new Date();
   var timeout = (15-d.getMinutes()%15)*60000;
