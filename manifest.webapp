@@ -1,17 +1,20 @@
 {
   "name": "muse",
   "type": "certified",
-  "description": "FFOS News Reader",
+  "description": "Muze News Reader",
   "launch_path": "/index.html",
   "icons": {
     "128": "/images/icon-128.png"
   },
   "developer": {
-    "name": "Capstone Team D"
+    "name": "Capstone Team D",
   },
   "permissions": {
     "networkstats-manage": {
       "description": "Needed for accessing network stats."
+    },
+    "network-events": {
+      "description": "Needed for nothing."
     },
     "network-events": {
       "description": "Needed for accessing network stats."
