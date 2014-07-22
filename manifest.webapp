@@ -1,26 +1,37 @@
 {
   "name": "muse",
   "type": "certified",
-  "description": "Muze News Reader",
+  "description": "Muse News Reader",
   "launch_path": "/index.html",
   "icons": {
     "128": "/images/icon-128.png"
   },
   "developer": {
-    "name": "Capstone Team D",
+    "name": "Capstone Team D"
   },
   "permissions": {
     "networkstats-manage": {
       "description": "Needed for accessing network stats."
     },
     "network-events": {
-      "description": "Needed for nothing."
-    },
-    "network-events": {
       "description": "Needed for accessing network stats."
     },
     "desktop-notification": {
       "description": "Needed for creating system notifications."
+    },
+    "device-storage:sdcard": {
+      "access": "readwrite"
+    },
+    "geolocation": {
+      "description": "Marking out user location"
+    },
+    "alarms": {
+      "description": "Required to schedule alarms"
     }
-  }
+  },
+  "messages": [
+    {
+      "alarm": "/index.html"
+    }
+  ]
 }
