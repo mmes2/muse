@@ -21,7 +21,7 @@ function nextBestWindow() {
 	var window = new Date().getTime() + 60000; // set window to 1 min from current time
 	//var window = new Date().getTime() + 1200000; // set window to 2 min from current time
 	//var window = new Date().getTime() + 300000; // set window to 5 min from current time
-	
+	console.log(window);
 	return window;
 }
 
@@ -31,9 +31,11 @@ function currentlyFetchable() {
 
 // call nextBestWindow to determine when to update stories
 var fetch_date = nextBestWindow();
+console.log(fetch_date);
 
 //Helper function to create an alarm (avoids repeat code)
 function createAlarm(fetch_date){
+	console.log("inside creating alarm");
 	var alarm_request = navigator.mozAlarms.add(fetch_date, "ignoreTimezone");
 	alarm_request.onsuccess = function () {
 		console.log("alarm was scheduled for" + fetch_date);
