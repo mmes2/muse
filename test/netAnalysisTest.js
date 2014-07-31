@@ -17,38 +17,58 @@ function openDone(value) {
 	console.log("saved data base.");
 	console.log(netStatsDB.data);
 	var day = netStatsDB.getDay();
-
 	console.log(day);
 }
 
 
 function testNetAnalysis() {
+	if (typeof netStats == "undefined") {
+		console.log("Error: Global object netStats is undefined.");
+		return;
+	}
+	
 	var error = netStats.init(makeServicesCall);
 	if (error) {
-		console.log("Error returned from netStats.init().");
+		console.log("Error: " + netStats.messages[error]);
+		// Handle error.
 	}
 }
 
 
 function makeServicesCall(error) {
 	if (error) {
-		console.log("Got error initializing netStats.");
+		console.log("Error: " + netStats.messages[error]);
+		// Handle error.
 		return;
 	}
 	
+	// All is good. Get next best time to connect to the Internet.
 	var goodConnectionTime = netStats.nextBestDate();
 	if (goodConnectionTime.error) {
-		console.log("No good connection time today.");
+		console.log("Error: " + netStats.messages[error]);
+		if (error == netStats.NO_GOOD_CONNECTION_TIME_TODAY) {
+			// Can try another day. 
+			// Example of trying next day. Not tested.
+			// var date = new Date();
+			// var nextDay = date.getMilliseconds() + (24 * 60 * 60 * 1000);
+			// date.setMilliseconds(newTime);
+			// netStats.analyser.runAnalysis(date);
+			// goodConnectionTime = netStats.nextBestDate();
+		}
 		
 	} else {
 		console.log("A good time to connect is: " + goodConnectionTime.date);
+		// Code that does something.
 	}
 }
 
-//testRecordCreation();
 
 testNetAnalysis();
 
 
+//testRecordCreation();
 //netStatsDB.clear();
+
+
+
 
