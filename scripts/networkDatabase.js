@@ -1,4 +1,6 @@
 /*
+* networkDatabase.js
+*  
 * This Source Code Form is subject to the terms of the Mozilla Public
 * License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -13,13 +15,17 @@
 var netStatsDB = (function() {
 	"use strict";
 	
-	var netDB = {}; // Empty shell of the network data base object
+	var netDB = {}; // Empty shell for the network data base object
 	
 	// add properties to data base object with default values.
 	netDB.data = [];     // This is all the data.
 	netDB.queueSize = 4; // Maximum number of weeks that are keep in the data base.
 	netDB.errorCodes = {DATABASE_EMPTY:1}; // Constants for error codes.
 	netDB.SUCCESS = 0;  // returned from functions on success.
+	
+	// Message strings for error codes.
+	netDB.messages = ["Success",
+	                  "The network data base is empty."];
 	
 	/*
 	 * ***************************************************************************************
@@ -28,7 +34,7 @@ var netStatsDB = (function() {
 	 */
 	
 	
-	// Called to populate the data base with stored data.
+	// Called to populate the in memory data base with persistent stored data.
 	netDB.open = function(callback) {
 		localforage.getItem('NetworkStatsDB', function(value) {
 			if (value === null) {
@@ -69,7 +75,7 @@ var netStatsDB = (function() {
 	};
 	
 	
-	// Removes all data from persistent storage.
+	// Removes all data from persistent storage and clears in memory data.
 	netDB.clear = function(callback) {
 		localforage.removeItem('NetworkStatsDB', function() {
 			this.data = [];
@@ -82,8 +88,6 @@ var netStatsDB = (function() {
 	};
 	
 	
-	
-	
 	/* 
 	 * **************************************************************************************
 	 * 	    SYCHRONOUS METHODS
@@ -91,7 +95,7 @@ var netStatsDB = (function() {
 	 */
 	
 	
-	// Adds record to in memory data base. Does not save it.
+	// Adds record to in memory data base. Does not save it to persistent storage.
 	// See generateFakeDays() for example usage and data structure of a record. 
 	netDB.addRecord = function(key, record) {
 		var Records = this.data[key] || [];
@@ -106,11 +110,21 @@ var netStatsDB = (function() {
 	};
 	
 	
+	// Sets the maximum number of weeks of data held for each record/data-point.
+	// Default is 4 weeks.
+	// Param  size:Integer
+	netDB.setQueueSize = function(size) {
+		if (typeof size == "number") {
+			this.queueSize = Math.floor(size);   // force size to be an Integer.
+		}
+	};
+	
+	
 	// Used to get network statistic records for current day or day passed in.
 	// Param day:Integer.  Range: 0-6  Represents day of the week.
 	// Returns: Array of records for the day.
-	netDB.getDay = function(day) {
-		day = day || new Date().getDay();
+	netDB.getRecordsDay = function(day) {
+		day = Math.floor(day) || new Date().getDay();
 		
 		var returnData = [];
 		var key = null;
@@ -132,8 +146,8 @@ var netStatsDB = (function() {
 	// Param  timeInterval:Integer  Time delta between data points.
 	netDB.generateFakeDays = function(date, numOfDays, timeInterval){
 		date = date || new Date();			// default day is today
-		numOfDays = numOfDays || 7;			// default to 7 days of data
-		timeInterval = timeInterval || 15;  // default to generating network data in 15 minute increments.
+		numOfDays = Math.floor(numOfDays) || 7;			// default to 7 days of data
+		timeInterval = Math.floor(timeInterval) || 15;  // default to generating network data in 15 minute increments.
 		
 		// start day at 00:00 am
 		date.setHours(0);
@@ -165,9 +179,9 @@ var netStatsDB = (function() {
 	
 	
 	// Generates array of fake networks.
-	// Needs work.
+	// To do: Make network data more realistic, i.e. variable.
 	netDB.getFakeNetworks = function(date) {
-		var day = new Date(date.getTime());
+		var day = new Date(date.getTime());  // Create new date object because the one passed in will change.
 		return [{Name: "linksys",
 	               CollectionDate: day,
 	               ConnectionType: "mobile", 
