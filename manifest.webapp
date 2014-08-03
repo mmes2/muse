@@ -1,26 +1,68 @@
 {
   "name": "muse",
   "type": "certified",
-  "description": "FFOS News Reader",
+  "description": "Muse News Reader",
   "launch_path": "/index.html",
   "icons": {
     "128": "/images/icon-128.png"
   },
   "developer": {
-    "name": "Capstone Team D",
+    "name": "Capstone Team D"
   },
   "permissions": {
-    "networkstats-manage": {
-      "description": "Needed for accessing network stats."
+    "geolocation": {},
+    "camera": {},
+    "alarms": {},
+    "tcp-socket": {},
+    "network-events": {},
+    "contacts": {
+      "access": "readwrite"
     },
-    "network-events": {
-      "description": "Needed for nothing."
+    "device-storage:apps": {
+      "access": "readwrite"
     },
-    "network-events": {
-      "description": "Needed for accessing network stats."
+    "device-storage:pictures": {
+      "access": "readwrite"
     },
-    "desktop-notification": {
-      "description": "Needed for creating system notifications."
+    "device-storage:videos": {
+      "access": "readwrite"
+    },
+    "device-storage:music": {
+      "access": "readwrite"
+    },
+    "device-storage:sdcard": {
+      "access": "readwrite"
+    },
+    "sms": {},
+    "telephony": {},
+    "browser": {},
+    "bluetooth": {},
+    "keyboard": {},
+    "mobileconnection": {},
+    "power": {},
+    "settings": {
+      "access": "readwrite"
+    },
+    "permissions": {},
+    "fmradio": {},
+    "attention": {},
+    "webapps-manage": {},
+    "backgroundservice": {},
+    "desktop-notification": {},
+    "networkstats-manage": {},
+    "wifi-manage": {},
+    "systemXHR": {},
+    "voicemail": {},
+    "deprecated-hwvideo": {},
+    "idle": {},
+    "time": {},
+    "embed-apps": {},
+    "storage": {},
+    "background-sensors": {}
+  },
+  "messages": [
+    {
+      "alarm": "/index.html"
     }
-  }
+  ]
 }
