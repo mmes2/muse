@@ -21,7 +21,7 @@
 //running on a phone. Most APIs will not be available in an emulator
 
 var netCollect = (function() { 
-  "use scrict";
+  "use strict";
   
   var collector = {};
 
@@ -34,7 +34,7 @@ var netCollect = (function() {
   collector.WifiDataSent = null;
   collector.WifiNetwork = null;
   collector.WifiData = null;
-  collector.WifiBandwidth = null;
+  collector.WifiLinkSpeed = null;
   collector.WifiSignalStrength = null;
   
   collector.MobileSignalStrength = null;
@@ -42,25 +42,22 @@ var netCollect = (function() {
   collector.MobileData = null;
   collector.MobileRoaming = null;
   
-  
+  var rate = null;
+  var minutes = null;
   
  
   collector.activate = function (PriorityLevel) {
 
-    //var rate;
-    var minutes;  
-
-    var oneMinute = 60000; // ms
-    if(PriorityLevel==1) { 
+    if(PriorityLevel===1) { 
       rate = 300000; 
       minutes = 5;    
-    } else if(PriorityLevel==2) { 
+    } else if(PriorityLevel===2) { 
       rate = 600000; 
       minutes = 10;   
-    } else if(PriorityLevel==3) { 
+    } else if(PriorityLevel===3) { 
       rate = 900000; 
       minutes = 15;
-    } else if(PriorityLevel==4) { 
+    } else if(PriorityLevel===4) { 
       rate = 1800000;  
       minutes = 30; 
     } else { 
@@ -68,13 +65,23 @@ var netCollect = (function() {
       minutes = 60;
     } 
 
+    
+    netStatsDB.open(collectCycle());
+    
+    
+  };
+  
+  var collectCycle = function () {
+  
+    var oneMinute = 60000; // ms
+    
     var d = new Date();
     var alarmId;
     var timeout = (minutes - d.getMinutes() % minutes) * oneMinute - (d.getSeconds() * 1000);
+    
     d.setTime(d.getTime() + timeout); 
 
     var collectAlarm = navigator.mozAlarms.add(d, "ignoreTimezone", {});
-
 
     collectAlarm.onsuccess = function () {
       collector.StartTime = new Date(); 
@@ -85,28 +92,27 @@ var netCollect = (function() {
     collectAlarm.onerror = function () {
       console.log("Unable to schedule alarm: " + this.error.name);
     };
-    navigator.mozSetMessageHandler("alarm", function (mozAlarm) { 
+
+    navigator.mozSetMessageHandler("alarm", function (alarm) { 
       collector.EndTime = new Date(); 
       console.log("Ending collection at: " + collector.EndTime); 
       
       if (alarmId) {
         navigator.mozAlarms.remove(alarmId);
+        navigator.mozAlarms.remove(alarm.id);
+        
       }
 
       collector.collectNetworkStats(function () {
-        collector.activate(PriorityLevel);
+        netStatsDB.save(collectCycle());
+        
       });
 
     });
   };
-
-  
   
   //Collect network stats, send record to networkDatabase
   collector.collectNetworkStats = function (callback){ 
-    var d = new Date();
-    var Interval = d.getDay() + " " + d.getHours() + ":" +  d.getMinutes();
-
     
     if(navigator.mozWifiManager){
       if(navigator.mozWifiManager.connection){
@@ -114,12 +120,12 @@ var netCollect = (function() {
         if(navigator.mozWifiManager.connection.status === "connected"){
           collector.WifiData = true;
           collector.WifiNetwork = navigator.mozWifiManager.connection.network.ssid;
-          collector.WifiBandwidth = navigator.mozWifiManager.connectionInformation.linkSpeed;  //in Mb/s
+          collector.WifiLinkSpeed = navigator.mozWifiManager.connectionInformation.linkSpeed;  //in Mb/s
           collector.WifiSignalStrength = navigator.mozWifiManager.connectionInformation.relSignalStrength;
         }else{
           collector.WifiData = false;
           collector.WifiNetwork = null;
-          collector.WifiBandwidth = null;
+          collector.WifiLinkSpeed = null;
           collector.WifiSignalStrength = null;
         }
         
@@ -163,7 +169,7 @@ var netCollect = (function() {
       collector.setSentRecieved(function () {
       
           collector.collectNetworkStats.writeRecord();
-          callback();
+          netStatsDB.save(callback());
 
       });
       
@@ -177,17 +183,16 @@ var netCollect = (function() {
 
       collector.collectNetworkStats.printLogs();
 
-      netStatsDB.addRecord( 
+      netStatsDB.addRecord( collector.EndTime.getDay() + " " + collector.EndTime.getHours() + ":" +  collector.EndTime.getMinutes(),
       { 
         "Start": collector.StartTime,
         "End": collector.EndTime,
-        "CollectionDate":d,
         "Latitude":collector.Latitude,
         "Longitude":collector.Longitude,
         "Wifi":{
           "Connected":collector.WifiData,
           "NetworkName":collector.WifiNetwork, 
-          "Bandwidth":collector.WifiBandwidth, 
+          "Bandwidth":collector.WifiLinkSpeed, 
           "SignalStrength":collector.WifiSignalStrength,
           "DataReceived":collector.WifiDataReceived,
           "DataSent":collector.WifiDataSent        
@@ -205,21 +210,34 @@ var netCollect = (function() {
       
       });
       
-      //callback();
     };
 
 
     collector.collectNetworkStats.printLogs = function () {
       console.log("****Collection Record****");
-      console.log("Wifi Network Name: " + collector.WifiNetwork);
-      
-      
-      console.log("Wifi Bandwidth: "+ collector.WifiBandwidth + " Mb/s");  
-      console.log("Wifi SignalStrength: " + collector.WifiSignalStrength + "%");
-      console.log("Wifi DataReceived: "+ collector.WifiDataReceived + " bytes");
-      console.log("Wifi DataSent: " + collector.WifiDataSent + " bytes");
       console.log("Latitude: "+ collector.Latitude);
       console.log("Longitude: " + collector.Longitude);
+      console.log("Start Time: " + collector.StartTime);
+      console.log("End Time: " + collector.EndTime);
+      
+      if(collector.WifiData === true){
+        console.log("Wifi Network Name: " + collector.WifiNetwork);
+        console.log("Wifi Link Speed: "+ collector.WifiLinkSpeed + " Mb/s");  
+        console.log("Wifi SignalStrength: " + collector.WifiSignalStrength + "%");
+        console.log("Wifi DataReceived: "+ collector.WifiDataReceived + " bytes");
+        console.log("Wifi DataSent: " + collector.WifiDataSent + " bytes");
+      }else {
+        console.log("No Wifi Connection");
+      }
+      
+      if(collector.MobileData === true){
+        console.log("Mobile Network Name: " + collector.MobileNetwork);
+        console.log("Mobile DataReceived: "+ collector.MobileDataReceived + " bytes");
+        console.log("Mobile DataSent: " + collector.MobileDataSent + " bytes");
+      }else{
+        console.log("No Mobile Connection");
+      }
+      
       console.log("****End of Record****");
     };
   };
@@ -228,9 +246,7 @@ var netCollect = (function() {
 ///////////////collector Helper functions/////////////////
 
   collector.setGeolocation = function(callback) {
-  
-    var geoTest = navigator.geolocation;
-    
+      
     if (navigator.geolocation) {
 
       var success = function (place) {
@@ -239,7 +255,7 @@ var netCollect = (function() {
         callback();       
       };
       
-      var error = function (place) {
+      var error = function () {
         console.log("GPS denied by user");
         callback();
       };
@@ -250,8 +266,7 @@ var netCollect = (function() {
       console.log("no geolocation");
       callback();
     }
-    
-    
+   
   };
   
   collector.setSentRecieved = function (callback) {
@@ -262,22 +277,31 @@ var netCollect = (function() {
       var networks = netStats.getAvailableNetworks();  
 
       networks.onsuccess = function () {
-        var aNetwork = networks.result[0];
-
-        var netSamples = netStats.getSamples(aNetwork, collector.StartTime, collector.EndTime); 
-
-        netSamples.onsuccess = function () {
-          var rData = netSamples.result.data;
-          
-          collector.WifiDataReceived = rData[0].rxBytes;
-          collector.WifiDataSent = rData[0].txBytes; 
-          
-          setTimeout(function () {
-            netStats.clearAllStats(); 
-            callback();}
-                     ,1000);       
-        };
         
+        var result = networks.result;
+        var netSamples;
+        
+        result.forEach(function (aNetwork) {
+          netSamples = netStats.getSamples(aNetwork, collector.StartTime, collector.EndTime);   
+        
+          netSamples.onsuccess = function () {
+            var rData = netSamples.result.data;
+
+            if(aNetwork.id === "0"){
+              collector.WifiDataReceived = rData[0].rxBytes;
+              collector.WifiDataSent = rData[0].txBytes; 
+            }else if(aNetwork.id === "1"){
+              collector.MobileDataReceived = rData[0].rxBytes;
+              collector.MobileDataSent = rData[0].txBytes; 
+            }
+
+            setTimeout(function () {
+              netStats.clearAllStats(); 
+              callback();} ,1000);       
+          };
+          
+        });
+       
       }; 
     }
   };
@@ -293,4 +317,4 @@ var netCollect = (function() {
 
 
 //This is commented out when committing to github. Should be activated in ui.js when going live
-netCollect.activate(1);
+//netCollect.activate(3);
