@@ -1,174 +1,320 @@
-//header coming soon!
+/* 
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*
+* @ File:        networkDataCollector.js
+* @ Author:      Mike Kuvelas     * 
+* 
+* Description:    On activation, the function collectNetworkStats will be called
+*                 on an interval provided by the user or program. 
+*                 collectNetworkStats will check current network connection 
+*                 information and save it to a database through the 
+*                 network_database interface
+* 
+* 
+*/
 
-//uncomment this if you want to clear database on next launch. THIS MIGHT INTERFERE WITH storyCache!!
-//localforage.clear(function(){});
-
-//This is commented out when committing to github. Should be activated in ui.js when going live
-//activate(3);
 
 //activate: When called, set alarms to call collectNetworkStats() at provided interval
 //Should be called in ui.js when ready for deployment. Only useful when actually 
 //running on a phone. Most APIs will not be available in an emulator
-function activate(PriorityLevel) {
 
-  var oneMinute = 60000; // ms
-  if(PriorityLevel==1) { rate = 300000; minutes = 5; } //5 minutes
-  else if(PriorityLevel==2) { rate = 600000; minutes = 10; } //10 minutes
-  else if(PriorityLevel==3) { rate = 900000; minutes = 15; } //15 minutes
-  else if(PriorityLevel==4) { rate = 1800000;  minutes = 30;} //30 minutes
-  else { rate = 3600000;  minutes = 60;} //1 hour
+var netCollect = (function() { 
+  "use strict";
+  
+  var collector = {};
 
-  var d = new Date();
-  var timeout = (minutes - d.getMinutes() % minutes) * oneMinute;
-  d.setTime(d.getTime() +timeout); 
-
-  var collectAlarm = navigator.mozAlarms.add(d, "ignoreTimezone");
-
-  collectAlarm.onsuccess = function () {
-  	console.log("alarm was scheduled for: " + d);
-  };
+  collector.StartTime = new Date();
+  collector.EndTime = collector.StartTime;
+  collector.Latitude = null;
+  collector.Longitude = null;
+  
+  collector.WifiDataReceived = null;
+  collector.WifiDataSent = null;
+  collector.WifiNetwork = null;
+  collector.WifiData = null;
+  collector.WifiLinkSpeed = null;
+  collector.WifiSignalStrength = null;
+  
+  collector.MobileSignalStrength = null;
+  collector.MobileNetwork = null;
+  collector.MobileData = null;
+  collector.MobileRoaming = null;
+  
+  var rate = null;
+  var minutes = null;
+  
  
-  collectAlarm.onerror = function () {
-  	console.log("Unable to schedule alarm: " + this.error.name);
-  }
-  navigator.mozSetMessageHandler("alarm", function (mozAlarm) { 
-    console.log("Collection alarm fired at: " + d); 
-    collectNetworkStats();
-    d.setTime(d.getTime() + rate);
-    collectAlarm = navigator.mozAlarms.add(d, "ignoreTimezone");
-  });
-}
+  collector.activate = function (PriorityLevel) {
 
-//Collect network stats, send record to networkDatabase
-//Currently: a hot mess
-function collectNetworkStats(){ 
-  var d = new Date();
-  var hour = d.getHours();
-  var minute = d.getMinutes();
-  var Interval = d.getDay() + " " + d.getHours() + ":" +  d.getMinutes();
+    if(PriorityLevel===1) { 
+      rate = 300000; 
+      minutes = 5;    
+    } else if(PriorityLevel===2) { 
+      rate = 600000; 
+      minutes = 10;   
+    } else if(PriorityLevel===3) { 
+      rate = 900000; 
+      minutes = 15;
+    } else if(PriorityLevel===4) { 
+      rate = 1800000;  
+      minutes = 30; 
+    } else { 
+      rate = 3600000; 
+      minutes = 60;
+    } 
 
-  //mozWifiManager doesn't seem to work, even on the phone
-  if(navigator.mozWifiManager){
-    var wifi = navigator.mozWifiManager;
-    var request = wifi.getNetworks();
-    console.log("networks: " + request);
-    var Name = request[0];
-  }else {
-    console.log("no mozWifiManager");
-    var Name = null;
-  }
+    
+    netStatsDB.open(collectCycle());
+    
+    
+  };
+  
+  var collectCycle = function () {
+  
+    var oneMinute = 60000; // ms
+    
+    var d = new Date();
+    var alarmId;
+    var timeout = (minutes - d.getMinutes() % minutes) * oneMinute - (d.getSeconds() * 1000);
+    
+    d.setTime(d.getTime() + timeout); 
 
-  if(navigator.mozNetworkStats) {
-    console.log("We have mozNetworkStats, you must be using an actual phone!");
+    var collectAlarm = navigator.mozAlarms.add(d, "ignoreTimezone", {});
 
-//    var manageWifi   = navigator.mozNetworkStats.connectionTypes.indexOf('wifi')   > -1;
-//    var manageMobile = navigator.mozNetworkStats.connectionTypes.indexOf('mobile') > -1;
-    var ConnectionType = null;
-  }else {
-    console.log("no mozNetworkStats");
-    var ConnectionType = null;
-  }
+    collectAlarm.onsuccess = function () {
+      collector.StartTime = new Date(); 
+      console.log("Starting collection at: " + collector.StartTime);
+      alarmId = this.result;
+    };
 
-  //this doesn't work
-  if(navigator.mozNetworkStats) {
-    var stats = navigator.mozNetworkStats;
+    collectAlarm.onerror = function () {
+      console.log("Unable to schedule alarm: " + this.error.name);
+    };
 
-    if(stats.MOBILE == 0){
-      ConnectionType = "mobile";
-    }else if(stats.WIFI == 0){
-      ConnectionType = "wifi";
-    }else{
-      ConnectionType = "none";
+    navigator.mozSetMessageHandler("alarm", function (alarm) { 
+      collector.EndTime = new Date(); 
+      console.log("Ending collection at: " + collector.EndTime); 
+      
+      if (alarmId) {
+        navigator.mozAlarms.remove(alarmId);
+        navigator.mozAlarms.remove(alarm.id);
+        
+      }
+
+      collector.collectNetworkStats(function () {
+        netStatsDB.save(collectCycle());
+        
+      });
+
+    });
+  };
+  
+  //Collect network stats, send record to networkDatabase
+  collector.collectNetworkStats = function (callback){ 
+    
+    if(navigator.mozWifiManager){
+      if(navigator.mozWifiManager.connection){
+      
+        if(navigator.mozWifiManager.connection.status === "connected"){
+          collector.WifiData = true;
+          collector.WifiNetwork = navigator.mozWifiManager.connection.network.ssid;
+          collector.WifiLinkSpeed = navigator.mozWifiManager.connectionInformation.linkSpeed;  //in Mb/s
+          collector.WifiSignalStrength = navigator.mozWifiManager.connectionInformation.relSignalStrength;
+        }else{
+          collector.WifiData = false;
+          collector.WifiNetwork = null;
+          collector.WifiLinkSpeed = null;
+          collector.WifiSignalStrength = null;
+        }
+        
+      }
+    }else {
+      console.log("no mozWifiManager");
     }
-  }
 
-  //no code on the next 3 data members
-  var Metered = false;
-  var Bandwidth = false;
-  var SignalStrength = false; //wifi - WiFi Information API, mobile - Mobile Connection API
+    
+    if(navigator.mozMobileConnections){
+      var tempMobile = navigator.mozMobileConnections; 
+      
+      ////This for each loop not working for some reason. Only testing first sim card for now
+      //tempMobile.forEach(function (aConnection) {
+        
+        //var mData = aConnection.data;
+        var mData = tempMobile[0].data;
+        
+        if(mData.connected === true){
+          collector.MobileData = true;
+          collector.MobileNetwork = mData.network;
+          collector.MobileSignalStrength = mData.relSignalStrength;          
+          collector.MobileBandwidth = "unknown";
+          collector.MobileRoaming = mData.roaming;
+          collector.MobileMetered = true;
+        }else{
+          collector.MobileData = false;
+          collector.MobileNetwork = null;
+          collector.MobileSignalStrength = null;          
+          collector.MobileBandwidth = null;
+          collector.MobileRoaming = null;
+          collector.MobileMetered = null;
+        }  
+    }else {
+      console.log("no mozMobileConnections");
+    }
 
+    
+    collector.setGeolocation(function () {
+          
+      collector.setSentRecieved(function () {
+      
+          collector.collectNetworkStats.writeRecord();
+          netStatsDB.save(callback());
 
-  //Getting data sent and received
-  if(navigator.mozNetworkStats){
-    var DataRecieved = 0;
-    var DataSent = 0;
+      });
+      
+    });
+    
 
-    // var networkInterfaces = navigator.mozNetworkStats.availableInterfaces;
-    var config = {
-      start: new Date(d.getTime() - (900000)),
-      end: new Date()
+///////////////collectNetworkStats Helper functions/////////////////
+
+    
+    collector.collectNetworkStats.writeRecord = function() {
+
+      collector.collectNetworkStats.printLogs();
+
+      netStatsDB.addRecord( collector.EndTime.getDay() + " " + collector.EndTime.getHours() + ":" +  collector.EndTime.getMinutes(),
+      { 
+        "Start": collector.StartTime,
+        "End": collector.EndTime,
+        "Latitude":collector.Latitude,
+        "Longitude":collector.Longitude,
+        "Wifi":{
+          "Connected":collector.WifiData,
+          "NetworkName":collector.WifiNetwork, 
+          "Bandwidth":collector.WifiLinkSpeed, 
+          "SignalStrength":collector.WifiSignalStrength,
+          "DataReceived":collector.WifiDataReceived,
+          "DataSent":collector.WifiDataSent        
+        },
+        Mobile:{
+          "Connected":collector.MobileData,
+          "NetworkName":collector.MobileNetwork,
+          "Bandwidth":collector.MobileBandwidth,
+          "SignalStrength":collector.MobileSignalStrength,
+          "DataReceived":0,
+          "DataSent":0,
+          "Roaming":collector.MobileRoaming,
+          "Metered":collector.MobileMetered          
+        }
+      
+      });
+      
     };
 
 
-    var stats = navigator.mozNetworkStats;
+    collector.collectNetworkStats.printLogs = function () {
+      console.log("****Collection Record****");
+      console.log("Latitude: "+ collector.Latitude);
+      console.log("Longitude: " + collector.Longitude);
+      console.log("Start Time: " + collector.StartTime);
+      console.log("End Time: " + collector.EndTime);
+      
+      if(collector.WifiData === true){
+        console.log("Wifi Network Name: " + collector.WifiNetwork);
+        console.log("Wifi Link Speed: "+ collector.WifiLinkSpeed + " Mb/s");  
+        console.log("Wifi SignalStrength: " + collector.WifiSignalStrength + "%");
+        console.log("Wifi DataReceived: "+ collector.WifiDataReceived + " bytes");
+        console.log("Wifi DataSent: " + collector.WifiDataSent + " bytes");
+      }else {
+        console.log("No Wifi Connection");
+      }
+      
+      if(collector.MobileData === true){
+        console.log("Mobile Network Name: " + collector.MobileNetwork);
+        console.log("Mobile DataReceived: "+ collector.MobileDataReceived + " bytes");
+        console.log("Mobile DataSent: " + collector.MobileDataSent + " bytes");
+      }else{
+        console.log("No Mobile Connection");
+      }
+      
+      console.log("****End of Record****");
+    };
+  };
 
-    var sampleRate = stats.sampleRate;
-    var request = stats.getAvailableNetworks();
-  //  var network = request.result[0];
+  
+///////////////collector Helper functions/////////////////
 
-  //  console.log("wifi: " + network);
-//    var request = mozNetworkStatsManager.getAvailableNetworks();
+  collector.setGeolocation = function(callback) {
+      
+    if (navigator.geolocation) {
 
-
-    request.onsuccess = function () {
-      var total = {
-        receive: 0,
-        send   : 0
+      var success = function (place) {
+        collector.Latitude = place.coords.latitude;
+        collector.Longitude = place.coords.longitude;
+        callback();       
       };
-
-      this.result.forEach(function (chunk) {
-        DataRecieved += chunk.rxBytes;
-        DataSent += chunk.txBytes;
-      });
-
-    console.log("Since: " + config.start.toString());
-    console.log("Data received: " + (total.receive / 1000).toFixed(2) + "Kb");
-    console.log("Data sent: " + (total.send / 1000).toFixed(2) + "Kb");
-
-
-    } 
-
-    request.onerror = function () {
-      console.log("Something goes wrong: " + request.error);
+      
+      var error = function () {
+        console.log("GPS denied by user");
+        callback();
+      };
+      
+      navigator.geolocation.getCurrentPosition(success,error);
+            
+    }else { 
+      console.log("no geolocation");
+      callback();
     }
+   
+  };
+  
+  collector.setSentRecieved = function (callback) {
+ 
+    if(navigator.mozNetworkStats){
 
-  }else{
-    var DataRecieved = false; //navigator.mozNetworkStats
-    var DataSent= false; //navigator.mozNetworkStats
-  }
+      var netStats = navigator.mozNetworkStats;
+      var networks = netStats.getAvailableNetworks();  
 
-  //GPS part. This might give bad data if geolocation not allowed by user
-  var Latitude = false;
-  var Longitude = false;
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      Latitude = position.coords.latitude;
-      Longitude = position.coords.longitude;
-    });
-  }else { console.out("no geolocation") } 
+      networks.onsuccess = function () {
+        
+        var result = networks.result;
+        var netSamples;
+        
+        result.forEach(function (aNetwork) {
+          netSamples = netStats.getSamples(aNetwork, collector.StartTime, collector.EndTime);   
+        
+          netSamples.onsuccess = function () {
+            var rData = netSamples.result.data;
 
-  console.log("Collection Record:");
-  console.log("Network Name: " + Name);
-  console.log("Connection Type: " + ConnectionType);
-  console.log("Metered: " +  Metered);
-  console.log("Bandwidth: "+ Bandwidth);
-  console.log("SignalStrength: " + SignalStrength);
-  console.log("DataRecieved: "+ DataRecieved);
-  console.log("DataSent: " + DataSent);
-  console.log("Latitude: "+ Latitude);
-  console.log("Longitude: " + Longitude);
+            if(aNetwork.id === "0"){
+              collector.WifiDataReceived = rData[0].rxBytes;
+              collector.WifiDataSent = rData[0].txBytes; 
+            }else if(aNetwork.id === "1"){
+              collector.MobileDataReceived = rData[0].rxBytes;
+              collector.MobileDataSent = rData[0].txBytes; 
+            }
 
-  addRecord( 
-  { "Interval":Interval, 
-    "CollectionDate":d,
-    "Name":Name, 
-    "ConnectionType":ConnectionType, 
-    "Metered":Metered,
-    "Bandwidth":Bandwidth, 
-    "SignalStrength":SignalStrength,
-    "DataRecieved":DataRecieved,
-    "DataSent":DataSent,
-    "Latitude":Latitude,
-    "Longitude":Longitude
+            setTimeout(function () {
+              netStats.clearAllStats(); 
+              callback();} ,1000);       
+          };
+          
+        });
+       
+      }; 
+    }
+  };
+
+  ///////////////Clear rx/tx values before first collection/////////////////
+  collector.setSentRecieved(function () {
+    console.log("cleared sent/received data");
   });
-}
+
+  return collector;
+
+}());
+
+
+//This is commented out when committing to github. Should be activated in ui.js when going live
+//netCollect.activate(3);
