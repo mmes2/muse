@@ -30,6 +30,8 @@ var storyCache = {
             if (value === null)
             {
                 news = value ;
+                console.log(news);
+
                 callback(news);
             }
             else{
