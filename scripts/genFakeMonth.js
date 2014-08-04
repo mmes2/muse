@@ -30,8 +30,26 @@ var fakeMonth = (function () {
 	var data9 = 6000000;
 	
 	var signal0 = 0;
+	var signal1 = 10;
+	var signal2 = 20;
+	var signal3 = 30;
+	var signal4 = 40;
+	var signal5 = 50;
+	var signal6 = 60;
+	var signal7 = 70;
+	var signal8 = 80;
+	var signal9 = 90;
 	
-	var link0 = 0;
+	var link1 = 0;
+	var link2 = 10;
+	var link3 = 20;
+	var link4 = 30;
+	var link5 = 40;
+	var link6 = 50;
+	var link7 = 60;
+	var link8 = 70;
+	var link9 = 80;
+	var link0 = 90;
 	
 	
 	var generator = {};
@@ -67,11 +85,6 @@ var fakeMonth = (function () {
 				}
 			});
 		};
-		
-		
-		
-		
-		
 		
 		var setSunday = function (){
 			//Sunday (0) - 9am - 5pm

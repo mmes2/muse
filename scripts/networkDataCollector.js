@@ -48,9 +48,12 @@ var netCollect = (function() {
  
   collector.activate = function (PriorityLevel) {
 
+    var alarmManager = navigator.mozAlarms;
+    var alarms = alarmManager.getAll();
+
     if(PriorityLevel===1) { 
-      rate = 300000; 
-      minutes = 5;    
+        rate = 300000; 
+        minutes = 5;    
     } else if(PriorityLevel===2) { 
       rate = 600000; 
       minutes = 10;   
@@ -64,11 +67,21 @@ var netCollect = (function() {
       rate = 3600000; 
       minutes = 60;
     } 
-
     
-    netStatsDB.open(collectCycle());
-    
-    
+    //Clear any alarms that might be scheduled
+    alarms.onsuccess = function () {
+      var alarmList = alarms.result;
+      
+      if(alarmList){
+        alarmList.forEach(function(alarm){
+          console.log("removing alarm id:" + alarm.id);
+          alarmManager.remove(alarm.id);
+        });
+      }  
+      
+      netStatsDB.open(collectCycle());
+    };   
+        
   };
   
   var collectCycle = function () {
@@ -100,7 +113,6 @@ var netCollect = (function() {
       if (alarmId) {
         navigator.mozAlarms.remove(alarmId);
         navigator.mozAlarms.remove(alarm.id);
-        
       }
 
       collector.collectNetworkStats(function () {
@@ -110,6 +122,43 @@ var netCollect = (function() {
 
     });
   };
+  
+  //For networkAnalysis to use in currentlyFetchable() interface
+  collector.currentWifiInfo = function (callback) {
+    infoPack = {};
+    infoPack.WifiData = false;
+    infoPack.WifiNetwork = null;
+    infoPack.WifiLinkSpeed = null;
+    infoPack.WifiSignalStrength = null;
+    
+    if(navigator.mozWifiManager){
+    
+      if(navigator.mozWifiManager.connection){
+      
+        if(navigator.mozWifiManager.connection.status === "connected"){
+          infoPack.WifiData = true;
+          infoPack.WifiNetwork = navigator.mozWifiManager.connection.network.ssid;
+          infoPack.WifiLinkSpeed = navigator.mozWifiManager.connectionInformation.linkSpeed;  //in Mb/s
+          infoPack.WifiSignalStrength = navigator.mozWifiManager.connectionInformation.relSignalStrength;
+        }
+      }
+    } 
+    
+    callback(infoPack);
+    
+  };
+  
+  collector.fakeCurrentWifiInfo = function (callback) {
+    infoPack = {};
+    infoPack.WifiData = true;
+    infoPack.WifiNetwork = "fake network";
+    infoPack.WifiLinkSpeed = 32;
+    infoPack.WifiSignalStrength = 99; 
+    
+    callback(infoPack);
+    
+  };
+      
   
   //Collect network stats, send record to networkDatabase
   collector.collectNetworkStats = function (callback){ 
@@ -317,4 +366,4 @@ var netCollect = (function() {
 
 
 //This is commented out when committing to github. Should be activated in ui.js when going live
-//netCollect.activate(3);
+netCollect.activate(3);
