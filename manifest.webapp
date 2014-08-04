@@ -1,6 +1,5 @@
 {
-  "name": "muse",
-  "type": "certified",
+  "name": "Muse",
   "description": "Muse News Reader",
   "launch_path": "/index.html",
   "icons": {
