@@ -48,39 +48,44 @@ var netCollect = (function() {
  
   collector.activate = function (PriorityLevel) {
 
-    var alarmManager = navigator.mozAlarms;
-    var alarms = alarmManager.getAll();
+    if(navigator.mozNetworkStats){
+      
+      var alarmManager = navigator.mozAlarms;
+      var alarms = alarmManager.getAll();
 
-    if(PriorityLevel===1) { 
-        rate = 300000; 
-        minutes = 5;    
-    } else if(PriorityLevel===2) { 
-      rate = 600000; 
-      minutes = 10;   
-    } else if(PriorityLevel===3) { 
-      rate = 900000; 
-      minutes = 15;
-    } else if(PriorityLevel===4) { 
-      rate = 1800000;  
-      minutes = 30; 
-    } else { 
-      rate = 3600000; 
-      minutes = 60;
-    } 
-    
-    //Clear any alarms that might be scheduled
-    alarms.onsuccess = function () {
-      var alarmList = alarms.result;
-      
-      if(alarmList){
-        alarmList.forEach(function(alarm){
-          console.log("removing alarm id:" + alarm.id);
-          alarmManager.remove(alarm.id);
-        });
-      }  
-      
-      netStatsDB.open(collectCycle());
-    };   
+      if(PriorityLevel===1) { 
+          rate = 300000; 
+          minutes = 5;    
+      } else if(PriorityLevel===2) { 
+        rate = 600000; 
+        minutes = 10;   
+      } else if(PriorityLevel===3) { 
+        rate = 900000; 
+        minutes = 15;
+      } else if(PriorityLevel===4) { 
+        rate = 1800000;  
+        minutes = 30; 
+      } else { 
+        rate = 3600000; 
+        minutes = 60;
+      } 
+
+      //Clear any alarms that might be scheduled
+      alarms.onsuccess = function () {
+        var alarmList = alarms.result;
+
+        if(alarmList){
+          alarmList.forEach(function(alarm){
+            console.log("removing alarm id:" + alarm.id);
+            alarmManager.remove(alarm.id);
+          });
+        }  
+
+        netStatsDB.open(collectCycle());
+      };
+    }else{
+      console.log("Using emulator, network data collector shutting down");
+    }
         
   };
   
@@ -90,7 +95,7 @@ var netCollect = (function() {
     
     var d = new Date();
     var alarmId;
-    var timeout = (minutes - d.getMinutes() % minutes) * oneMinute - (d.getSeconds() * 1000);
+    var timeout = 10000; //(minutes - d.getMinutes() % minutes) * oneMinute - (d.getSeconds() * 1000);
     
     d.setTime(d.getTime() + timeout); 
 
@@ -124,7 +129,7 @@ var netCollect = (function() {
   };
   
   //For networkAnalysis to use in currentlyFetchable() interface
-  collector.currentWifiInfo = function (callback) {
+  collector.currentWifiInfo = function () {
     infoPack = {};
     infoPack.WifiData = false;
     infoPack.WifiNetwork = null;
@@ -144,18 +149,18 @@ var netCollect = (function() {
       }
     } 
     
-    callback(infoPack);
+    return infoPack;
     
   };
   
-  collector.fakeCurrentWifiInfo = function (callback) {
+  collector.fakeCurrentWifiInfo = function () {
     infoPack = {};
     infoPack.WifiData = true;
     infoPack.WifiNetwork = "fake network";
     infoPack.WifiLinkSpeed = 32;
     infoPack.WifiSignalStrength = 99; 
     
-    callback(infoPack);
+    return infoPack;
     
   };
       
@@ -297,8 +302,10 @@ var netCollect = (function() {
   collector.setGeolocation = function(callback) {
       
     if (navigator.geolocation) {
-
+      console.log("have geolocation!");
+      
       var success = function (place) {
+        console.log("Success gps!");
         collector.Latitude = place.coords.latitude;
         collector.Longitude = place.coords.longitude;
         callback();       
@@ -309,7 +316,7 @@ var netCollect = (function() {
         callback();
       };
       
-      navigator.geolocation.getCurrentPosition(success,error);
+      navigator.geolocation.getCurrentPosition(success,error, {timeout:10000});
             
     }else { 
       console.log("no geolocation");
@@ -366,4 +373,4 @@ var netCollect = (function() {
 
 
 //This is commented out when committing to github. Should be activated in ui.js when going live
-//netCollect.activate(3);
+netCollect.activate(3);
