@@ -373,4 +373,4 @@ var netCollect = (function() {
 
 
 //This is commented out when committing to github. Should be activated in ui.js when going live
-netCollect.activate(3);
+//netCollect.activate(3);
