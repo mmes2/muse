@@ -771,4 +771,4 @@ var fakeMonth = (function () {
 
 }());
 
-fakeMonth.generateFakeMonth();
+//fakeMonth.generateFakeMonth();
