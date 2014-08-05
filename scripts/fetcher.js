@@ -13,7 +13,7 @@ var fetcher = {
     /**
      * @function fetch the news conditionally based on the number of stories specified
      * @param num number news want to fetch in a single call
-     * @param callback
+     * @param callback action to do after the news have been fetched
      */
 
     fetchNews: function (num, callback) {
@@ -54,9 +54,7 @@ var fetcher = {
                     news.push(rss);
                 });
                 //store the news
-                storyCache.store(news);
-                if (typeof (callback) =='function')
-                    callback();
+                storyCache.store(news,callback);
             })
         });
     },
