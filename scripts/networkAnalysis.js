@@ -44,7 +44,7 @@ var netStats = (function() {
 		// Date that the analysis was run for. 
 		date:null,
 		
-	    // Does analysis on bandwidth data to determine best times to connect to the Internet.
+	  // Does analysis on bandwidth data to determine best times to connect to the Internet.
 		// Analyses one day's data across the number of weeks stored in netStatsDB.
 		// Param  date:Date object. If not passed in then the current date is used
 		runAnalysis:function(date) {

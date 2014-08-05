@@ -22,16 +22,20 @@ var storyCache = {
      The function must sort the news according to pub-date and remove duplicating item.
      After all the hardword has been done, then overwrite then sorted news into the storyCache
      for efficiency.
-     @return { array of rss object} news   -  array news in sorted order without duplicated item
+     @param (function)callback( news) : function to execute with the news story from the story cache
+
      */
     get: function (callback){
         localforage.getItem("news", function(value){
             var news;
+            //if the storyCache if empty
             if (value === null)
             {
                 news = value ;
+
                 callback(news);
             }
+            //otherwise, sort the news, execute callback and store the result back to storyCache
             else{
                 if (!(value  instanceof Array))
                     throw "storyCache doesn't return array"
@@ -47,6 +51,8 @@ var storyCache = {
                 if (value[length -1].ts != tmp[tmp.length -1].ts )
                     tmp.push( value[length-1]);
                 news = tmp;
+                if (typeof(callback)==='function')
+                    callback(news);
                 //store the sorted array back to storyCache
                 storyCache.overwrite(news);
             }
@@ -58,9 +64,11 @@ var storyCache = {
     /**
      @function empty the storyCache
      */
-    empty: function (){
+    empty: function (callback){
         localforage.removeItem('news',function(){
             console.log("cleared storyCache");
+            if (typeof(callback)==='function')
+                callback();
         });
     },
     /**
