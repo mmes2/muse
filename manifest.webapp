@@ -58,7 +58,9 @@
     "embed-apps": {},
     "storage": {},
     "background-sensors": {}
+
   },
+    "chrome": { "navigation": true },
   "messages": [
     {
       "alarm": "/index.html"

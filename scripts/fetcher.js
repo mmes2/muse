@@ -13,7 +13,7 @@ var fetcher = {
     /**
      * @function fetch the news conditionally based on the number of stories specified
      * @param num number news want to fetch in a single call
-     * @param callback
+     * @param callback action to do after the news have been fetched
      */
 
     fetchNews: function (num, callback) {
@@ -34,7 +34,6 @@ var fetcher = {
                     country = "us"
             }
             //TODO: convert country code to google edition code
-            document.getElementById("test").innerHTML = country;
             //construct the URL
             url = "http://news.google.com/news/feeds?pz=2&cf=all&ned=" + country + "&output=rss&num=" + num;
 
@@ -48,16 +47,14 @@ var fetcher = {
                     var el = $(this);
                     rss.title = el.find("title").text();
                     rss.link = el.find("link").text();
-                    rss.description = el.find("description").text();
+                    rss.description = el.find("description").text().replace('src="//','src="http://');
                     rss.category = el.find("category").text();
                     var pubDate = el.find("pubDate").text();
                     rss.ts = fetcher.convertDate(pubDate);
                     news.push(rss);
                 });
                 //store the news
-                storyCache.store(news);
-                if (typeof (callback) =='function')
-                    callback();
+                storyCache.store(news,callback);
             })
         });
     },
@@ -73,3 +70,6 @@ var fetcher = {
         return timestamp;
     }
 }
+//fetcher.fetchNews(20);
+//storyCache.get()
+//storyCache.empty();
