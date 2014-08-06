@@ -48,6 +48,7 @@ var netCollect = (function() {
  
   collector.activate = function (PriorityLevel) {
 
+    
     if(navigator.mozNetworkStats){
       
       var alarmManager = navigator.mozAlarms;
@@ -89,13 +90,15 @@ var netCollect = (function() {
         
   };
   
+  //Private recursive function. Sets alarm for next collection interval, calls collectNetworkStats using this function as callback
   var collectCycle = function () {
   
     var oneMinute = 60000; // ms
+    var oneSecond = 1000;
     
     var d = new Date();
-    var alarmId;
-    var timeout = 10000; //(minutes - d.getMinutes() % minutes) * oneMinute - (d.getSeconds() * 1000);
+    var alarmId; 
+    var timeout = 10000; //(minutes - d.getMinutes() % minutes) * oneMinute - (d.getSeconds() * oneSecond);
     
     d.setTime(d.getTime() + timeout); 
 
@@ -128,45 +131,10 @@ var netCollect = (function() {
     });
   };
   
-  //For networkAnalysis to use in currentlyFetchable() interface
-  collector.currentWifiInfo = function () {
-    infoPack = {};
-    infoPack.WifiData = false;
-    infoPack.WifiNetwork = null;
-    infoPack.WifiLinkSpeed = null;
-    infoPack.WifiSignalStrength = null;
-    
-    if(navigator.mozWifiManager){
-    
-      if(navigator.mozWifiManager.connection){
-      
-        if(navigator.mozWifiManager.connection.status === "connected"){
-          infoPack.WifiData = true;
-          infoPack.WifiNetwork = navigator.mozWifiManager.connection.network.ssid;
-          infoPack.WifiLinkSpeed = navigator.mozWifiManager.connectionInformation.linkSpeed;  //in Mb/s
-          infoPack.WifiSignalStrength = navigator.mozWifiManager.connectionInformation.relSignalStrength;
-        }
-      }
-    } 
-    
-    return infoPack;
-    
-  };
-  
-  collector.fakeCurrentWifiInfo = function () {
-    infoPack = {};
-    infoPack.WifiData = true;
-    infoPack.WifiNetwork = "fake network";
-    infoPack.WifiLinkSpeed = 32;
-    infoPack.WifiSignalStrength = 99; 
-    
-    return infoPack;
-    
-  };
-      
-  
   //Collect network stats, send record to networkDatabase
   collector.collectNetworkStats = function (callback){ 
+    
+    var wifiTest = navigator.mozWifiManager;
     
     if(navigator.mozWifiManager){
       if(navigator.mozWifiManager.connection){
@@ -228,12 +196,10 @@ var netCollect = (function() {
       });
       
     });
+        
+///////Synchronous Helper Functions of netCollect///////
     
-
-///////////////collectNetworkStats Helper functions/////////////////
-
-    
-    collector.collectNetworkStats.writeRecord = function() {
+    var writeRecord = function() {
 
       collector.collectNetworkStats.printLogs();
 
@@ -295,9 +261,47 @@ var netCollect = (function() {
       console.log("****End of Record****");
     };
   };
+  
+  //For networkAnalysis to use in currentlyFetchable() interface
+  collector.currentWifiInfo = function () {
+    infoPack = {};
+    infoPack.WifiData = false;
+    infoPack.WifiNetwork = null;
+    infoPack.WifiLinkSpeed = null;
+    infoPack.WifiSignalStrength = null;
+    
+    if(navigator.mozWifiManager){
+    
+      if(navigator.mozWifiManager.connection){
+      
+        if(navigator.mozWifiManager.connection.status === "connected"){
+          infoPack.WifiData = true;
+          infoPack.WifiNetwork = navigator.mozWifiManager.connection.network.ssid;
+          infoPack.WifiLinkSpeed = navigator.mozWifiManager.connectionInformation.linkSpeed;  //in Mb/s
+          infoPack.WifiSignalStrength = navigator.mozWifiManager.connectionInformation.relSignalStrength;
+        }
+      }
+    } 
+    
+    return infoPack;
+    
+  };
+  
+  //For networkAnalysis to use in currentlyFetchable() interface when running in emulator
+  collector.fakeCurrentWifiInfo = function () {
+    infoPack = {};
+    infoPack.WifiData = true;
+    infoPack.WifiNetwork = "fake network";
+    infoPack.WifiLinkSpeed = 32;
+    infoPack.WifiSignalStrength = 99; 
+    
+    return infoPack;
+    
+  };
+
 
   
-///////////////collector Helper functions/////////////////
+///////Asynchronous Helper Functions of netCollect///////
 
   collector.setGeolocation = function(callback) {
       
@@ -305,21 +309,20 @@ var netCollect = (function() {
       console.log("have geolocation!");
       
       var success = function (place) {
-        console.log("Success gps!");
         collector.Latitude = place.coords.latitude;
         collector.Longitude = place.coords.longitude;
         callback();       
       };
       
       var error = function () {
-        console.log("GPS denied by user");
+        console.log("GPS unavailable");
         callback();
       };
       
-      navigator.geolocation.getCurrentPosition(success,error, {timeout:10000});
+      navigator.geolocation.getCurrentPosition(success,error, {timeout:8000});
             
     }else { 
-      console.log("no geolocation");
+      console.log("no navigator.geolocation");
       callback();
     }
    
@@ -327,6 +330,8 @@ var netCollect = (function() {
   
   collector.setSentRecieved = function (callback) {
  
+    var netTest = navigator.mozNetworkStats;
+    
     if(navigator.mozNetworkStats){
 
       var netStats = navigator.mozNetworkStats;
@@ -362,7 +367,9 @@ var netCollect = (function() {
     }
   };
 
-  ///////////////Clear rx/tx values before first collection/////////////////
+  /*Run when netStats object is created to 
+  * clear rx/tx values before first collection
+  */
   collector.setSentRecieved(function () {
     console.log("cleared sent/received data");
   });
@@ -373,4 +380,4 @@ var netCollect = (function() {
 
 
 //This is commented out when committing to github. Should be activated in ui.js when going live
-//netCollect.activate(3);
+netCollect.activate(3);
