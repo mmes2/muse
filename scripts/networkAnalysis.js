@@ -179,10 +179,15 @@ var netStats = (function() {
 	
 	
 	netstats.currentlyFetchable = function() {
-		var infoPack = netCollect.currentWifiInfo();
+		var infoPack;
+		if(navigator.mozWifiManager){
+			infoPack = netCollect.currentWifiInfo();
+		} else {
+			infoPack = netCollect.fakeCurrentWifiInfo();
+		}
 		
         if (infoPack.WifiData === true) {
-            if (infoPack.WifiLinkSpeed > 4 && infoPack.SignalStrength > 24) {
+            if (infoPack.WifiLinkSpeed > 4 && infoPack.WifiSignalStrength > 24) {
               return true;
             }
         }
