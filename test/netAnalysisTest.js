@@ -45,8 +45,8 @@ function makeServicesCall(error) {
 	// All is good. Get next best time to connect to the Internet.
 	var goodConnectionTime = netStats.nextBestDate();
 	if (goodConnectionTime.error) {
-		console.log("Error: " + netStats.messages[error]);
-		if (error == netStats.NO_GOOD_CONNECTION_TIME_TODAY) {
+		console.log("Error: " + netStats.messages[goodConnectionTime.error]);
+		if (goodConnectionTime.error == netStats.NO_GOOD_CONNECTION_TIME_TODAY) {
 			// Can try another day. 
 			// Example of trying next day. Not tested.
 			// var date = new Date();
@@ -58,7 +58,15 @@ function makeServicesCall(error) {
 		
 	} else {
 		console.log("A good time to connect is: " + goodConnectionTime.date);
-		// Code that does something.
+		
+		// CurrentlFetchable test code
+		if (netStats.currentlyFetchable()) {
+			// Code that does something.
+			console.log("currentlyFetchable returned True.");
+		} else {
+			console.log("currentlyFetchable returned False.");
+		}
+		
 	}
 }
 

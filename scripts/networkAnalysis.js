@@ -48,14 +48,15 @@ var netStats = (function() {
 		// Analyses one day's data across the number of weeks stored in netStatsDB.
 		// Param  date:Date object. If not passed in then the current date is used
 		runAnalysis:function(date) {
-			this.date = this.date || new Date();
+			this.date = date || new Date();
 			var records = netStatsDB.getRecordsDay(this.date.getDay());  // get records for today.
 			var goodTimes = [];  // local variable version of netstats.goodTimes.
 			var bool = null;  // temp variable used to simplify code.
 			
 			// Look at each record and determine if a network is present that has sufficient bandwidth.
 			for (var i = 0; i < records.length ; ++i) {
-				bool = this.bandwidthGood(records[i][0].Networks); // only looking at first data point in queue because using fake data.
+				// only looking at first data point in queue because using fake data.
+				bool = this.bandwidthGood(records[i][0].Wifi); 
 				goodTimes.push(bool);
 			}
 			
@@ -68,13 +69,11 @@ var netStats = (function() {
 		
 		// Determines if there is sufficient bandwidth in the passed in list of network objects.
 		// Param  networks:array of network objects. See networkDatabase.js getFakeNetworks() for example network object.
-		bandwidthGood:function(networks) {
-			var minGoodBandwidth = 500;
-			for (var i = 0; i < networks.length; ++i) {
-				if (networks[i].Bandwidth > minGoodBandwidth) {
-					return true;
-				}
-			}				
+		bandwidthGood:function(WiFiNetwork) {
+			var minGoodBandwidth = 50;
+			if (WiFiNetwork.Bandwidth > minGoodBandwidth) {
+				return true;
+			}			
 			return false;
 		}
 	};
@@ -108,7 +107,8 @@ var netStats = (function() {
 				
 			} else if (status == netStatsDB.errorCodes.DATABASE_EMPTY) {
 				// Populate the DB with fake data and then do analysis.
-				netStatsDB.generateFakeDays(new Date(), 28, 15);  // create four weeks of data at 15 minute increments.
+				//netStatsDB.generateFakeDays(new Date(), 28, 15);  // create four weeks of data at 15 minute increments.
+				fakeMonth.generateFakeMonth();
 				console.log("Finished generating Fake data.");
 								
 				netStatsDB.save(function(){});
@@ -176,6 +176,20 @@ var netStats = (function() {
 			return {date:curDate, error:netStats.errorCodes.NO_GOOD_CONNECTION_TIME_TODAY};
 		}
 	};
+	
+	
+	netstats.currentlyFetchable = function() {
+		var infoPack = netCollect.currentWifiInfo();
+		
+        if (infoPack.WifiData === true) {
+            if (infoPack.WifiLinkSpeed > 4 && infoPack.SignalStrength > 24) {
+              return true;
+            }
+        }
+        
+        return false;
+	};
+	
 	
 	
 	// return network statistics object to global name space.
