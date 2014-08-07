@@ -1,5 +1,6 @@
 {
   "name": "Muse",
+  "type": "certified",
   "description": "Muse News Reader",
   "launch_path": "/index.html",
   "icons": {
@@ -58,9 +59,8 @@
     "embed-apps": {},
     "storage": {},
     "background-sensors": {}
-
   },
-    "chrome": { "navigation": true },
+  "chrome": { "navigation": true },
   "messages": [
     {
       "alarm": "/index.html"
