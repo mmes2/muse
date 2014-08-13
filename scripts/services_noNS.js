@@ -8,20 +8,15 @@
 * 				  determines the best times for fetching data from the Internet.
 */
 
-// setup global services object
-var services = (function () {
-	"use strict";
-
-	var srvs = {};
-	
 	/*
 		ToDo: link listener to 'refresh button' so that fetch timer is only created when
 		user hits button (or stories are read). Also clean up code relating to curr_time
 		and only set fetchDate using netStats.
 	*/
+
 	var fetchDate, curr_time;
 
-  srvs.activate(){
+  function activate(){
     //fetchDate = netStats.nextBestDate(); // fails due to error
 	  curr_time = new Date();
     fetchDate = new Date(curr_time.getTime() + 5000);
@@ -99,10 +94,10 @@ var services = (function () {
 		}
 	});
 
-	srvs.fetcher_callback = function fetcher_callback(){
+	var fetcher_callback = function fetcher_callback(){
 		console.log('fetched stories!!');
 	};
 
-}());
+activate();
 
-srvs.activate();
+
