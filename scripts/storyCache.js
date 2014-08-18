@@ -77,7 +77,7 @@ var storyCache = {
     overwrite: function (news){
         localforage.removeItem('news',function(){
             localforage.setItem("news",news,function(value){
-                console.log(value);
+               
             });
         });
     },

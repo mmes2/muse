@@ -38,7 +38,7 @@ var services = (function () {
 				});
 			}
 		};
-
+		ui.update();
 		netStats.analyzer = fetcherAnalysis.analyzer;
 		netStats.nextBestDate = fetcherAnalysis.nextBestDate;
 
@@ -62,7 +62,7 @@ var services = (function () {
 
 
 		netCollect.activate(1);
-		ui.update();
+		
   };
 
 	//Helper function to create an alarm
