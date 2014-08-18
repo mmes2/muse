@@ -15,19 +15,17 @@
 var fakeMonth = (function () {
 	"use strict";
 	
-	var startDate = new Date();   //Monday September 1st @ 9:00am
-	var endDate = new Date();
 	
 	var data0 = 0;
-	var data1 = 100;
-	var data2 = 400;
-	var data3 = 2000;
-	var data4 = 10000;
-	var data5 = 50000;
-	var data6 = 100000;
-	var data7 = 500000;
-	var data8 = 2000000;
-	var data9 = 6000000;
+	var data1 = 1000;
+	var data2 = 4000;
+	var data3 = 15000;  //first usable time for wifi
+	var data4 = 300000;
+	var data5 = 500000;
+	var data6 = 1000000;
+	var data7 = 5000000;
+	var data8 = 15000000; //first unusable time for wifi
+	var data9 = 600000000;
 	
 	var signal0 = 0;
 	var signal1 = 10;
@@ -40,22 +38,32 @@ var fakeMonth = (function () {
 	var signal8 = 80;
 	var signal9 = 90;
 	
-	var link1 = 0;
-	var link2 = 10;
-	var link3 = 20;
-	var link4 = 30;
-	var link5 = 40;
-	var link6 = 50;
-	var link7 = 60;
-	var link8 = 70;
-	var link9 = 80;
-	var link0 = 90;
+	var link0 = 0;
+	var link1 = 10;
+	var link2 = 20;
+	var link3 = 30;
+	var link4 = 40;
+	var link5 = 50;
+	var link6 = 60;
+	var link7 = 70;
+	var link8 = 80;
+	var link9 = 90;
 	
 	
 	var generator = {};
 	
 	generator.generateFakeMonth = function(){
 
+		var startDate = new Date();
+		var endDate = new Date();
+		
+		//////first date is Monday September 1st//////////////////////////////////////////
+		startDate.setMonth(8);
+		startDate.setDate(0);
+		endDate.setMonth(8);
+		endDate.setDate(0);
+		//netStatsDB.clear(function (){});
+		
 		var timeDelta = 60 * 15 * 1000;  // seconds, minutes, milliseconds: Time between data entries in milliseconds.
 
 		var add = function (record) {
@@ -90,104 +98,104 @@ var fakeMonth = (function () {
 			//Sunday (0) - 9am - 5pm
 			//starts low data sent/recieved, peaks around noon, slow decline until collection stops
 			//no change in other data members
-			
-			add(["0 9:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+
+			add(["0 9:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal1, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 9:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["0 9:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link1, signal2, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 9:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["0 9:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link2, signal3, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 9:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["0 9:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link3, signal4, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 10:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data2, false,null,null,null,null,null,null,null]);
+			add(["0 10:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link4, signal5, data1, data2, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 10:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data2, false,null,null,null,null,null,null,null]);
+			add(["0 10:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link5, signal5, data1, data2, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 10:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data2, false,null,null,null,null,null,null,null]);
+			add(["0 10:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link6, signal5, data1, data2, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 10:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data2, false,null,null,null,null,null,null,null]);
+			add(["0 10:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link7, signal6, data1, data2, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 11:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data3, false,null,null,null,null,null,null,null]);
+			add(["0 11:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link8, signal6, data1, data3, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 11:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data3, false,null,null,null,null,null,null,null]);
+			add(["0 11:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link9, signal6, data1, data3, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 11:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data3, false,null,null,null,null,null,null,null]);
+			add(["0 11:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link9, signal6, data1, data3, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 11:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data3, false,null,null,null,null,null,null,null]);
+			add(["0 11:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link9, signal6, data1, data3, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 12:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["0 12:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link9, signal6, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 12:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["0 12:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link9, signal6, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 12:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["0 12:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link9, signal7, data1, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 12:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["0 12:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link9, signal8, data1, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 13:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data6, false,null,null,null,null,null,null,null]);
+			add(["0 13:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link9, signal9, data1, data6, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 13:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data6, false,null,null,null,null,null,null,null]);
+			add(["0 13:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link9, signal9, data1, data6, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 13:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["0 13:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link9, signal9, data1, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 13:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["0 13:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link9, signal9, data1, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 14:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["0 14:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link9, signal0, data1, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 14:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["0 14:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link8, signal0, data1, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 14:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["0 14:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link7, signal0, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 14:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["0 14:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link6, signal0, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 15:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["0 15:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link5, signal0, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 15:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["0 15:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link4, signal0, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 15:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data3, false,null,null,null,null,null,null,null]);
+			add(["0 15:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link3, signal0, data1, data3, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 15:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data3, false,null,null,null,null,null,null,null]);
+			add(["0 15:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link3, signal0, data1, data3, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 16:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data3, false,null,null,null,null,null,null,null]);
+			add(["0 16:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link3, signal0, data1, data3, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 16:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data2, null,null,null,null,null,null]);
+			add(["0 16:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link2, signal0, data1, data2, null,null,null,null,null,null]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 16:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data2, false,null,null,null,null,null,null,null]);
+			add(["0 16:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link2, signal0, data1, data2, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 16:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["0 16:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link1, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["0 17:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["0 17:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 		};
 		
 		
@@ -196,20 +204,20 @@ var fakeMonth = (function () {
 			//9am-5pm, with 10am up to 1pm (not including) times missing
 			startDate.setHours(8);
 			startDate.setMinutes(56);
-			endDate.setHours(8);
+			endDate.setHours(9);
 			endDate.setMinutes(0);
 
 
-			add(["1 9:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["1 9:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link7, signal7, data7, data7, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 9:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["1 9:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link6, signal6, data6, data6, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 9:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["1 9:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 9:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["1 9:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 
 
 			///missing 10am - 1pm
@@ -219,55 +227,55 @@ var fakeMonth = (function () {
 			endDate.setHours(13);
 			endDate.setMinutes(0);
 
-			add(["1 13:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data9, false,null,null,null,null,null,null,null]);
+			add(["1 13:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link6, signal6, data7, data7, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 13:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data9, false,null,null,null,null,null,null,null]);
+			add(["1 13:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link7, signal7, data7, data7, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 13:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data9, false,null,null,null,null,null,null,null]);
+			add(["1 13:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data9, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 13:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data9, false,null,null,null,null,null,null,null]);
+			add(["1 13:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data9, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 14:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data9, false,null,null,null,null,null,null,null]);
+			add(["1 14:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data9, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 14:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data9, false,null,null,null,null,null,null,null]);
+			add(["1 14:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data9, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 14:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["1 14:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 14:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["1 14:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link9, signal9, data7, data7, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 15:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["1 15:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 15:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["1 15:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 15:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["1 15:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 15:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["1 15:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 16:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data0, false,null,null,null,null,null,null,null]);
+			add(["1 16:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data0, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 16:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data0, false,null,null,null,null,null,null,null]);
+			add(["1 16:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data0, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 16:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["1 16:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 16:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["1 16:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["1 17:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["1 17:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 		};
 		
 		//Tuesday (2)
@@ -279,103 +287,103 @@ var fakeMonth = (function () {
 		  endDate.setMinutes(0);		
 
 
-			add(["2 9:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["2 9:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 9:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data2, false,null,null,null,null,null,null,null]);
+			add(["2 9:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data2, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 9:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data3, false,null,null,null,null,null,null,null]);
+			add(["2 9:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data3, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 9:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["2 9:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 10:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["2 10:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 10:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data6, false,null,null,null,null,null,null,null]);
+			add(["2 10:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data6, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 10:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data7, false,null,null,null,null,null,null,null]);
+			add(["2 10:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data7, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 10:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["2 10:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 11:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data3, false,null,null,null,null,null,null,null]);
+			add(["2 11:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data3, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 11:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["2 11:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 11:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["2 11:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 11:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data3, false,null,null,null,null,null,null,null]);
+			add(["2 11:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data3, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 12:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["2 12:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 12:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data6, false,null,null,null,null,null,null,null]);
+			add(["2 12:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data6, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 12:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["2 12:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 12:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["2 12:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 13:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["2 13:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 13:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data2, false,null,null,null,null,null,null,null]);
+			add(["2 13:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data2, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 13:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data2, false,null,null,null,null,null,null,null]);
+			add(["2 13:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data2, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 13:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["2 13:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 14:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data7, false,null,null,null,null,null,null,null]);
+			add(["2 14:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data7, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 14:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data9, false,null,null,null,null,null,null,null]);
+			add(["2 14:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data9, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 14:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data9, false,null,null,null,null,null,null,null]);
+			add(["2 14:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data9, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 14:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data6, false,null,null,null,null,null,null,null]);
+			add(["2 14:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data6, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 15:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["2 15:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 15:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data2, false,null,null,null,null,null,null,null]);
+			add(["2 15:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data2, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 15:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["2 15:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 15:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["2 15:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 16:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["2 16:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 16:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data8, false,null,null,null,null,null,null,null]);
+			add(["2 16:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data8, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 16:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data9, false,null,null,null,null,null,null,null]);
+			add(["2 16:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data9, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 16:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data9, false,null,null,null,null,null,null,null]);
+			add(["2 16:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data9, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["2 17:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data2, false,null,null,null,null,null,null,null]);
+			add(["2 17:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data2, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 		};
 		
 	
@@ -389,55 +397,76 @@ var fakeMonth = (function () {
 			endDate.setHours(9);
 			endDate.setMinutes(0);
 			
-			add(["3 9:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["3 9:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 9:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["3 9:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 9:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data2, false,null,null,null,null,null,null,null]);
+			add(["3 9:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data2, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 9:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data3, false,null,null,null,null,null,null,null]);
+			add(["3 9:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data3, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 10:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data3, false,null,null,null,null,null,null,null]);
+			add(["3 10:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data3, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 10:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data4, false,null,null,null,null,null,null,null]);
+			add(["3 10:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data4, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 10:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data5, false,null,null,null,null,null,null,null]);
+			add(["3 10:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 10:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data6, false,null,null,null,null,null,null,null]);
+			add(["3 10:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data6, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 11:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data6, false,null,null,null,null,null,null,null]);
+			add(["3 11:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data6, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 11:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data6, false,null,null,null,null,null,null,null]);
+			add(["3 11:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data6, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 11:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data7, false,null,null,null,null,null,null,null]);
+			add(["3 11:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data7, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 11:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data7, false,null,null,null,null,null,null,null]);
+			add(["3 11:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data7, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 12:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data8, false,null,null,null,null,null,null,null]);
+			add(["3 12:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data8, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 12:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data8, false,null,null,null,null,null,null,null]);
+			add(["3 12:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data8, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 12:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data9, false,null,null,null,null,null,null,null]);
+			add(["3 12:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data9, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 12:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data8, false,null,null,null,null,null,null,null]);
+			add(["3 12:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data8, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["3 13:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data8, false,null,null,null,null,null,null,null]);
+			add(["3 13:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data8, false, "T-Mobile", null, signal0, data0, data0, false, true]);
+
+			
+			startDate.setHours(15);
+			startDate.setMinutes(15); 
+			endDate.setHours(15);
+			endDate.setMinutes(30);
+
+			add(["3 13:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link7, signal7, data2, data2, true, "T-Mobile", null, signal5, data5, data5, false, false]);
+			startDate.setTime(endDate.getTime());
+			endDate.setTime(startDate.getTime() + timeDelta);
+			add(["3 13:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link5, signal5, data7, data7, true, "T-Mobile", null, signal6, data5, data5, false, false]);
+			startDate.setTime(endDate.getTime());
+			endDate.setTime(startDate.getTime() + timeDelta);
+			add(["3 14:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",false, "linksys", link8, signal8, data7, data7, true, "T-Mobile", null, signal7, data5, data5, false, false]);
+			startDate.setTime(endDate.getTime());
+			endDate.setTime(startDate.getTime() + timeDelta);
+			add(["3 14:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",false, "linksys", link7, signal7, data7, data7, true, "T-Mobile", null, signal6, data5, data5, false, false]);
+			startDate.setTime(endDate.getTime());
+			endDate.setTime(startDate.getTime() + timeDelta);
+			add(["3 14:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",false, "linksys", link5, signal5, data7, data7, true, "T-Mobile", null, signal5, data5, data5, false, false]);
+			
 			
 		};
 
@@ -448,70 +477,70 @@ var fakeMonth = (function () {
 			endDate.setHours(9);
 			endDate.setMinutes(0);
 			
-			add(["4 9:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 9:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 9:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 9:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 9:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 9:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 9:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 9:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 10:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 10:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 10:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 10:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 10:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 10:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 10:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 10:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 11:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 11:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 11:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 11:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 11:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 11:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 11:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 11:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 12:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 12:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			
 			startDate.setHours(19);
 			startDate.setMinutes(11);
 			endDate.setHours(19);
 			endDate.setMinutes(15);
-			add(["4 19:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 19:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link7, signal7, data5, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 19:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 19:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link7, signal7, data5, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 19:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 19:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link7, signal7, data5, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 20:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 20:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link7, signal7, data5, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 20:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 20:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link7, signal7, data5, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 20:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 20:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link7, signal7, data5, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 20:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 20:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link7, signal7, data5, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["4 21:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["4 21:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link7, signal7, data5, data5, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			
 			
 			
@@ -523,32 +552,32 @@ var fakeMonth = (function () {
 			endDate.setHours(10);
 			endDate.setMinutes(0);
 			
-			add(["5 10:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 10:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 10:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 10:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 10:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 10:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 10:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 10:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			
 			startDate.setHours(11);
 			startDate.setMinutes(11);
 			endDate.setHours(11);
 			endDate.setMinutes(30);
 			
-			add(["5 11:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 11:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 11:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 11:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 12:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 12:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 12:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 12:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			
 			
 			startDate.setHours(13);
@@ -556,31 +585,31 @@ var fakeMonth = (function () {
 			endDate.setHours(13);
 			endDate.setMinutes(45);
 			
-			add(["5 13:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 13:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 14:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 14:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 14:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 14:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 14:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 14:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 14:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 14:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 15:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 15:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 15:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 15:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 15:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 15:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 15:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 15:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			
 			
 			startDate.setHours(16);
@@ -588,43 +617,43 @@ var fakeMonth = (function () {
 			endDate.setHours(17);
 			endDate.setMinutes(0);
 			
-			add(["5 17:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 17:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			
 			startDate.setHours(20);
 			startDate.setMinutes(45);
 			endDate.setHours(21);
 			endDate.setMinutes(0);
 			
-			add(["5 21:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 21:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 21:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 21:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 21:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 21:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 21:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
-			add(["5 22:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 21:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
+			add(["5 22:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 22:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 22:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 22:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 22:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 22:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
-			add(["5 23:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 22:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
+			add(["5 23:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 23:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 23:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 23:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 23:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["5 23:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["5 23:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 
 		};
 		var setSaturday = function (){
@@ -632,25 +661,25 @@ var fakeMonth = (function () {
 			
 			startDate.setHours(23);
 			startDate.setMinutes(45);
-			startDate.setDate(5);
+			//startDate.setDate(5);
 			
 			endDate.setHours(0);
 			endDate.setMinutes(0);
 			
-			add(["6 0:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["6 0:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["6 0:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["6 0:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["6 0:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["6 0:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["6 0:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
-			add(["6 1:0",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["6 0:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
+			add(["6 1:0",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["6 1:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["6 1:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			
 			startDate.setHours(14);
 			startDate.setMinutes(59);
@@ -658,34 +687,31 @@ var fakeMonth = (function () {
 			endDate.setMinutes(0);
 			
 			
-			add(["6 15:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["6 15:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["6 15:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["6 15:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["6 15:30",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["6 15:30",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["6 15:45",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
-			add(["6 16:00",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["6 15:45",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
+			add(["6 16:00",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			startDate.setTime(endDate.getTime());
 			endDate.setTime(startDate.getTime() + timeDelta);
-			add(["6 16:15",startDate, endDate, "00000", "00000",true, "linksys", link0, signal0, data1, data1, false,null,null,null,null,null,null,null]);
+			add(["6 16:15",new Date(startDate.getTime()), new Date(endDate.getTime()), "00000", "00000",true, "linksys", link0, signal0, data1, data1, false, "T-Mobile", null, signal0, data0, data0, false, true]);
 			
 		};
 		
-		////////////////////////////////////////////////
-		startDate.setMonth(9);
-		startDate.setDate(1);		
-		endDate.setMonth(9);
-		endDate.setDate(1);
+		
 
 
 		setMonday();
-		startDate.setDate(2);
+		startDate.setDate(1);
 		endDate = new Date(startDate.getTime() + timeDelta);
 		setTuesday();
+		
 		startDate.setDate(3);
 		endDate = new Date(startDate.getTime() + timeDelta);
 		setWednesday();
@@ -765,10 +791,13 @@ var fakeMonth = (function () {
 		endDate = new Date(startDate.getTime() + timeDelta);
 		setSunday();
 		
+		
+		
+		
 	};
 	
 	return generator;
 
 }());
 
-//fakeMonth.generateFakeMonth();
+fakeMonth.generateFakeMonth();

@@ -47,7 +47,13 @@ var fetcher = {
                     var el = $(this);
                     rss.title = el.find("title").text();
                     rss.link = el.find("link").text();
-                    rss.description = el.find("description").text().replace('src="//','src="http://');
+                    
+                    var desc = el.find("description").text();
+                    desc = desc.replace('src="//','src="http://');
+                    desc = desc.replace(/&nbsp;...*/,"... (Read more)</font></td></tr></table>");
+                    
+                    rss.description = desc;
+                    
                     rss.category = el.find("category").text();
                     var pubDate = el.find("pubDate").text();
                     rss.ts = fetcher.convertDate(pubDate);
@@ -70,6 +76,6 @@ var fetcher = {
         return timestamp;
     }
 }
-//fetcher.fetchNews(20);
+//fetcher.fetchNews(20);   
 //storyCache.get()
 //storyCache.empty();
