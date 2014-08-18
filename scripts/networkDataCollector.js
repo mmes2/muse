@@ -48,16 +48,19 @@ var netCollect = (function() {
   
  
   collector.activate = function (PriorityLevel) {
-
     
     if(navigator.mozNetworkStats){
 
       /*Run when netStats object is created to 
       * clear rx/tx values before first collection
       */
-      collector.setSentRecieved(function () {
-        console.log("cleared sent/received data");
-      });
+      var netStats = navigator.mozNetworkStats;
+      netStats.clearAllStats(); 
+      
+      //Old way:
+      //collector.setSentRecieved(function () {
+      //  console.log("cleared sent/received data");
+      //});
       
       var alarmManager = navigator.mozAlarms;
       var alarms = alarmManager.getAll();
@@ -78,28 +81,14 @@ var netCollect = (function() {
         rate = 3600000; 
         minutes = 60;
       } 
-
-      //Clear any alarms that might be scheduled
-      //This needs to come out of my code and into services
-      //Needs to be run once so alarms from last time program was loaded are cleared
-      alarms.onsuccess = function () {
-        var alarmList = alarms.result;
-
-        if(alarmList){
-          alarmList.forEach(function(alarm){
-            console.log("removing alarm id:" + alarm.id);
-            alarmManager.remove(alarm.id);
-          });
-        }  
         
-        //This part will stay in my code
-        //Open database, if success, begin collection cycle
-        netStatsDB.open(function(status) {
-			    if (status == netStatsDB.SUCCESS) {				
-            netStatsDB.open(collectCycle());
-          }
-        });
-      };
+      //Open database, if success, begin collection cycle
+      netStatsDB.open(function(status) {
+        if (status == netStatsDB.SUCCESS) {				
+          collectCycle();
+        }
+      });
+        
       
     }else{
       //Collecting network stats is not possible on an emulator
@@ -146,10 +135,8 @@ var netCollect = (function() {
         navigator.mozAlarms.remove(alarm.id);
       }
 
-      collector.collectNetworkStats(function () {
-        netStatsDB.save(collectCycle());
-        
-      });
+      collector.collectNetworkStats(collectCycle);
+
 
     });
   };
@@ -189,7 +176,7 @@ var netCollect = (function() {
         
         if(mData.connected === true){
           collector.MobileData = true;
-          collector.MobileNetwork = mData.network;
+          collector.MobileNetwork = mData.network.longName;
           collector.MobileSignalStrength = mData.relSignalStrength;          
           collector.MobileBandwidth = "unknown";  //Not sure how I am collecting this yet
           collector.MobileRoaming = mData.roaming;
@@ -211,49 +198,15 @@ var netCollect = (function() {
           
       collector.setSentRecieved(function () {
       
-          writeRecord();
-          netStatsDB.save(callback());
+        writeRecord(function(){
+          netStatsDB.save(callback);
+        });
 
       });
       
     });
         
 ///////Synchronous Helper Functions of netCollect///////
-    
-    var writeRecord = function() {
-
-      //Remove after debugging
-      collector.collectNetworkStats.printLogs();
-
-      netStatsDB.addRecord( collector.EndTime.getDay() + " " + collector.EndTime.getHours() + ":" +  collector.EndTime.getMinutes(),
-      { 
-        "Start": collector.StartTime,
-        "End": collector.EndTime,
-        "Latitude":collector.Latitude,
-        "Longitude":collector.Longitude,
-        "Wifi":{
-          "Connected":collector.WifiData,
-          "NetworkName":collector.WifiNetwork, 
-          "Bandwidth":collector.WifiLinkSpeed, 
-          "SignalStrength":collector.WifiSignalStrength,
-          "DataReceived":collector.WifiDataReceived,
-          "DataSent":collector.WifiDataSent        
-        },
-        Mobile:{
-          "Connected":collector.MobileData,
-          "NetworkName":collector.MobileNetwork,
-          "Bandwidth":collector.MobileBandwidth,
-          "SignalStrength":collector.MobileSignalStrength,
-          "DataReceived":0,
-          "DataSent":0,
-          "Roaming":collector.MobileRoaming,
-          "Metered":collector.MobileMetered          
-        }
-      
-      });
-      
-    };
-
 
     //Print record logs. Will not be needed after debugging, but will stay for future improvement testing
     collector.collectNetworkStats.printLogs = function () {
@@ -275,6 +228,8 @@ var netCollect = (function() {
       
       if(collector.MobileData === true){
         console.log("Mobile Network Name: " + collector.MobileNetwork);
+        console.log("Mobile Signal Strength: " + collector.MobileSignalStrength);
+        console.log("Mobile Roaming?: " + collector.MobileRoaming);
         console.log("Mobile DataReceived: "+ collector.MobileDataReceived + " bytes");
         console.log("Mobile DataSent: " + collector.MobileDataSent + " bytes");
       }else{
@@ -325,7 +280,39 @@ var netCollect = (function() {
 
 
   ///////Asynchronous Helper Functions of netCollect///////
+  var writeRecord = function(callback) {
 
+    //Remove after debugging
+    collector.collectNetworkStats.printLogs();
+
+    netStatsDB.addRecord( collector.EndTime.getDay() + " " + collector.EndTime.getHours() + ":" +  collector.EndTime.getMinutes(),
+                         { 
+                           "Start": collector.StartTime,
+                           "End": collector.EndTime,
+                           "Latitude":collector.Latitude,
+                           "Longitude":collector.Longitude,
+                           "Wifi":{
+                             "Connected":collector.WifiData,
+                             "NetworkName":collector.WifiNetwork, 
+                             "Bandwidth":collector.WifiLinkSpeed, 
+                             "SignalStrength":collector.WifiSignalStrength,
+                             "DataReceived":collector.WifiDataReceived,
+                             "DataSent":collector.WifiDataSent        
+                           },
+                           Mobile:{
+                             "Connected":collector.MobileData,
+                             "NetworkName":collector.MobileNetwork,
+                             "Bandwidth":collector.MobileBandwidth,
+                             "SignalStrength":collector.MobileSignalStrength,
+                             "DataReceived":0,
+                             "DataSent":0,
+                             "Roaming":collector.MobileRoaming,
+                             "Metered":collector.MobileMetered          
+                           }
+
+                         });
+    callback();
+  };
   /*setGeolocation
     Arguments: callback function
     Description: sets latitude and longitude variables if possible
@@ -367,7 +354,7 @@ var netCollect = (function() {
     Waits a second to call back so forEach loop has time to finish
     */
   collector.setSentRecieved = function (callback) {
-    
+
     if(navigator.mozNetworkStats){
 
       var netStats = navigator.mozNetworkStats;
@@ -376,29 +363,31 @@ var netCollect = (function() {
       networks.onsuccess = function () {
         
         var result = networks.result;
-        var netSamples;
-        
+             
         result.forEach(function (aNetwork) {
-          netSamples = netStats.getSamples(aNetwork, collector.StartTime, collector.EndTime);   
+          var netSamples = netStats.getSamples(aNetwork, collector.StartTime, collector.EndTime);   
         
           netSamples.onsuccess = function () {
             var rData = netSamples.result.data;
 
-            if(aNetwork.id === "0"){
+            //var type = netSamples.result.network.type;
+            
+            if(aNetwork.type === 0){
               collector.WifiDataReceived = rData[0].rxBytes;
               collector.WifiDataSent = rData[0].txBytes; 
-            }else if(aNetwork.id === "1"){
+            }else if(aNetwork.type === 1){
               collector.MobileDataReceived = rData[0].rxBytes;
               collector.MobileDataSent = rData[0].txBytes; 
             }
-
-            //Do I need this timeout?
-            setTimeout(function () {
-              netStats.clearAllStats(); 
-              callback();} ,1000);       
+            
           };
           
         });
+        setTimeout(function () 
+                       {
+                         netStats.clearAllStats(); 
+                         callback();
+                       } ,1000);       
        
       }; 
     }

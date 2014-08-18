@@ -50,7 +50,7 @@ font {
   font-family: Fira Sans Medium;
   letter-spacing: .15em;
   text-align: center;
-  positon: absolute;
+  position: absolute;
   left: 0px;
   top: 0px;
   padding: 10px 0;
@@ -63,7 +63,7 @@ font {
   font-weight: bold;
   letter-spacing: .15em;
   text-decoration: none;
-  positon: absolute;
+  position: absolute;
   left: 0px;
   top: 0px;
 }

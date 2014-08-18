@@ -40,7 +40,7 @@ var netStats = (function() {
 	// has a 'runAnalysis' function and a 'date' property. Use duck typing. 
 	// This can be set before or after calling init(). 
 	// Example: netStats.analyzer = myAnalyserObject;
-	netstats.analyser = {
+	netstats.analyzer = {
 		// Date that the analysis was run for. 
 		date:null,
 		
@@ -98,7 +98,7 @@ var netStats = (function() {
 		
 		netStatsDB.open(function(status) {
 			if (status == netStatsDB.SUCCESS) {				
-				netStats.analyser.runAnalysis();			
+				netStats.analyzer.runAnalysis();			
 				netStats.ready = true;
 				
 				if (typeof netStats.onReadyCallback === "function"){
@@ -114,7 +114,7 @@ var netStats = (function() {
 				netStatsDB.save(function(){});
 				console.log("saved data base.");
 
-				netStats.analyser.runAnalysis();				
+				netStats.analyzer.runAnalysis();				
 				netStats.ready = true;
 				
 				if (typeof netStats.onReadyCallback === "function"){
@@ -145,9 +145,9 @@ var netStats = (function() {
 	// Function for getting the next best time to try downloading data from the Internet.
 	// Returns:Tuple  {date:Date, error:netStats.SUCCESS or error code}
 	// Note: Looks at netStats.goodTimes array which defaults to the current day, but it can be a different
-	// day if netStats.analyser.runAnalysis(date) is called with a different date before calling this method.
+	// day if netStats.analyzer.runAnalysis(date) is called with a different date before calling this method.
 	netstats.nextBestDate = function() {
-		var curDate = netStats.analyser.date;
+		var curDate = netStats.analyzer.date;
 		var curTotalMinutes = curDate.getHours() * 60 + curDate.getMinutes();
 		var startIndex = Math.ceil(curTotalMinutes / netStats.deltaTime);
 		var index = startIndex;

@@ -55,7 +55,7 @@ var netStatsDB = (function() {
 	
 	// Saves current data to persistent storage. 
 	netDB.save = function(callback) {
-		var db = {stats:this.data, queueSize:this.queueSize};
+		var db = {stats:netDB.data, queueSize:this.queueSize};
 		localforage.setItem('NetworkStatsDB', db, function(value) {
 			if (typeof callback === "function"){
 		    	callback(netStatsDB.SUCCESS);
@@ -67,7 +67,7 @@ var netStatsDB = (function() {
 	// Saves current data to persistent storage and clears data from memory.
 	netDB.close = function(callback) {
 		this.save(function(value) {
-			this.data = [];
+			netDB.data = [];
 			if (typeof callback === "function"){
 		    	callback(netStatsDB.SUCCESS);
 		    }
@@ -78,7 +78,7 @@ var netStatsDB = (function() {
 	// Removes all data from persistent storage and clears in memory data.
 	netDB.clear = function(callback) {
 		localforage.removeItem('NetworkStatsDB', function() {
-			this.data = [];
+			netDB.data = [];
 			console.log('Data base is cleared!');
 		    if (typeof callback === "function"){
 		    	callback(netStatsDB.SUCCESS);
