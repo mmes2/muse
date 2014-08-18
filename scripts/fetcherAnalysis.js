@@ -8,7 +8,7 @@ var fetcherAnalysis = (function() {
 	fetchAnalysis.wifiCollectionTimes = [];
 	fetchAnalysis.mobileCollectionTimes = [];
 
-	fetchAnalysis.analyser = {
+	fetchAnalysis.analyzer = {
 		// Date that the analysis was run for. 
 		date:null,
 
@@ -137,7 +137,7 @@ var fetcherAnalysis = (function() {
 		var bestIndex = 0;
 		var bestLinkSpeed = 0;		
 		var bestSS = 0;	
-		var todaysWifiTimes = fetcherAnalysis.wifiCollectionTimes.filter(fetcherAnalysis.analyser.futureTime);
+		var todaysWifiTimes = fetcherAnalysis.wifiCollectionTimes.filter(fetcherAnalysis.analyzer.futureTime);
 		var todaysMobileTimes;
 		
 		//Helper function: nextHour
@@ -175,7 +175,7 @@ var fetcherAnalysis = (function() {
 			
 		}else{
 			//No wifi times within hour, find best mobile time within hour
-			todaysMobileTimes = fetcherAnalysis.mobileCollectionTimes.filter(fetcherAnalysis.analyser.futureTime);	
+			todaysMobileTimes = fetcherAnalysis.mobileCollectionTimes.filter(fetcherAnalysis.analyzer.futureTime);	
 			var nextMobile = nextHour(todaysMobileTimes);
 			
 			if(nextMobile.length > 0){

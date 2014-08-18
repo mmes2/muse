@@ -39,7 +39,7 @@ var services = (function () {
 			}
 		};
 
-		netStats.analyser = fetcherAnalysis.analyser;
+		netStats.analyzer = fetcherAnalysis.analyzer;
 		netStats.nextBestDate = fetcherAnalysis.nextBestDate;
 
 		//Get new stories on program launch if connected to a good source
@@ -70,6 +70,11 @@ var services = (function () {
 		
     
 		if(fetchTime !== null){
+			/*Set fetch time for 10 seconds before analysis returned date
+			Advantages: 1. Collection and fetcher won't be running at same time
+			            2. Network use will be recorded over interval assigned, 
+			               available next week for analysis
+			*/
 			fetchTime.setTime(fetchTime.getTime()-10000);
 		  var alarm_request = navigator.mozAlarms.add(fetchTime, "ignoreTimezone", {});
 			
@@ -113,12 +118,17 @@ var services = (function () {
 			});
 		}else{
 			var d = new Date();
+			
+			//time to try again, 5 Minutes from now
 			d.setTime(d.getTime() + 300000);
+			
+			//TODO: add counter so we can stop retrying after a few attempts. 
+			//Should call tryTomorrow if that happens
 			
 			var timeoutAlarm = navigator.mozAlarms.add(d, "ignoreTimezone", {});
 
 			timeoutAlarm.onsuccess = function () {
-				console.log("No Internet connection, tring again at: " + d.toString());
+				console.log("No Internet connection, trying again at: " + d.toString());
 				alarmId = this.result;
 			};
 
