@@ -56,6 +56,8 @@ var netCollect = (function() {
       */
       var netStats = navigator.mozNetworkStats;
       netStats.clearAllStats(); 
+      
+      //Old way:
       //collector.setSentRecieved(function () {
       //  console.log("cleared sent/received data");
       //});
@@ -205,41 +207,6 @@ var netCollect = (function() {
     });
         
 ///////Synchronous Helper Functions of netCollect///////
-    
-    var writeRecord = function(callback) {
-
-      //Remove after debugging
-      collector.collectNetworkStats.printLogs();
-
-      netStatsDB.addRecord( collector.EndTime.getDay() + " " + collector.EndTime.getHours() + ":" +  collector.EndTime.getMinutes(),
-      { 
-        "Start": collector.StartTime,
-        "End": collector.EndTime,
-        "Latitude":collector.Latitude,
-        "Longitude":collector.Longitude,
-        "Wifi":{
-          "Connected":collector.WifiData,
-          "NetworkName":collector.WifiNetwork, 
-          "Bandwidth":collector.WifiLinkSpeed, 
-          "SignalStrength":collector.WifiSignalStrength,
-          "DataReceived":collector.WifiDataReceived,
-          "DataSent":collector.WifiDataSent        
-        },
-        Mobile:{
-          "Connected":collector.MobileData,
-          "NetworkName":collector.MobileNetwork,
-          "Bandwidth":collector.MobileBandwidth,
-          "SignalStrength":collector.MobileSignalStrength,
-          "DataReceived":0,
-          "DataSent":0,
-          "Roaming":collector.MobileRoaming,
-          "Metered":collector.MobileMetered          
-        }
-      
-      });
-      callback();
-    };
-
 
     //Print record logs. Will not be needed after debugging, but will stay for future improvement testing
     collector.collectNetworkStats.printLogs = function () {
@@ -313,7 +280,39 @@ var netCollect = (function() {
 
 
   ///////Asynchronous Helper Functions of netCollect///////
+  var writeRecord = function(callback) {
 
+    //Remove after debugging
+    collector.collectNetworkStats.printLogs();
+
+    netStatsDB.addRecord( collector.EndTime.getDay() + " " + collector.EndTime.getHours() + ":" +  collector.EndTime.getMinutes(),
+                         { 
+                           "Start": collector.StartTime,
+                           "End": collector.EndTime,
+                           "Latitude":collector.Latitude,
+                           "Longitude":collector.Longitude,
+                           "Wifi":{
+                             "Connected":collector.WifiData,
+                             "NetworkName":collector.WifiNetwork, 
+                             "Bandwidth":collector.WifiLinkSpeed, 
+                             "SignalStrength":collector.WifiSignalStrength,
+                             "DataReceived":collector.WifiDataReceived,
+                             "DataSent":collector.WifiDataSent        
+                           },
+                           Mobile:{
+                             "Connected":collector.MobileData,
+                             "NetworkName":collector.MobileNetwork,
+                             "Bandwidth":collector.MobileBandwidth,
+                             "SignalStrength":collector.MobileSignalStrength,
+                             "DataReceived":0,
+                             "DataSent":0,
+                             "Roaming":collector.MobileRoaming,
+                             "Metered":collector.MobileMetered          
+                           }
+
+                         });
+    callback();
+  };
   /*setGeolocation
     Arguments: callback function
     Description: sets latitude and longitude variables if possible

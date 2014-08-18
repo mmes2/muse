@@ -76,6 +76,6 @@ var fetcher = {
         return timestamp;
     }
 }
-//fetcher.fetchNews(20);   
+//fetcher.fetchNews(20);
 //storyCache.get()
 //storyCache.empty();

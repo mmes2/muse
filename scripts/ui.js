@@ -11,7 +11,6 @@ var ui = {
                 var story =  $('<div/>', {
                     class: 'story'
                 });
-                
                 des.appendTo(story);
                 story.appendTo($('#container'));
             });

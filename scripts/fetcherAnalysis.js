@@ -56,8 +56,8 @@ var fetcherAnalysis = (function() {
 
 		runAnalysis:function(date){
 			this.date = date || new Date();
-			//var todayStats = netStatsDB.getRecordsDay(this.date.getDay());  // get records for today.
-			var todayStats = netStatsDB.getRecordsDay(3);  // testing!
+			var todayStats = netStatsDB.getRecordsDay(this.date.getDay());  // get records for today.
+			//var todayStats = netStatsDB.getRecordsDay(3);  // testing!
 			var collectionTimes = [];
       
 			todayStats.forEach(function (interval){
