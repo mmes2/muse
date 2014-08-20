@@ -19,7 +19,7 @@ var fetcher = {
     fetchNews: function (num, callback) {
         //query country code
         $.get("http://ipinfo.io/json", function (data) {
-            country = data.country;
+            var country = data.country;
             country = "br";// testing
             //translate country code to google news edition code
             //Unfortunately, there is no programmactical way to do this. So if have time,
@@ -29,6 +29,24 @@ var fetcher = {
             switch(country.toLowerCase()) {
                 case "br":
                     country = "pt-BR_br";
+                    break;
+                case "co":
+                    country = "es_co";
+                    break;
+                case "mx":
+                    country = "es_mx";
+                    break;
+                case "pl":
+                    country = "pl_pl";
+                    break;
+                case "rs":
+                    country = "sr_rs";
+                    break;
+                case "es":
+                    country = "es";
+                    break;
+                case "ve":
+                    country = "es_ve";
                     break;
                 default:
                     country = "us"
