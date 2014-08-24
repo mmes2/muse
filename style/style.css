@@ -1,9 +1,11 @@
+@import url(../resources/headers.css);
+
 html {
   margin: 0;
   width: 100%;
   height: 100%;
   font-family: Helvetica;
-  background-color: white;
+  background-color:orange;
 }
 
 body {
@@ -12,8 +14,22 @@ body {
   height: 100%;
 }
 
+
+
 table {
   margin: 0 auto !important;
+}
+
+
+
+#title {
+  color:black;
+  font-size:14px;
+}
+
+#source {
+  color:blue;
+  font-size:10px;
 }
 
 .lh {
@@ -27,6 +43,23 @@ font {
   font: 12px Helvetica !important;
 }
 
+.unreadStory {
+  background-color: white;
+
+}
+.readStory {
+  background-color: lightgray;
+}
+  
+  
+ 
+  
+
+section[role="region"] {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
 .main_table {
     padding: 0;
     margin: 0;
@@ -35,27 +68,6 @@ font {
     height: 100%;
 }
 
-.header {
-  background: linear-gradient(to bottom, #33CCFF , #3333CC);
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  height: 55px;
-}
-
-.title {
-  color: white;
-  font-size: 28px;
-  font-weight: bold;
-  font-family: Fira Sans Medium;
-  letter-spacing: .15em;
-  text-align: center;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  padding: 10px 0;
-  width: 100%;
-}
 
 .back {
   color: white;

@@ -11,9 +11,11 @@
 // setup global services object
 var services = (function () {
 	"use strict";
-
+	
 	var fetchDate;
 	var alarmId;
+	var retryTimes = 0;
+	var retryLimit = 3;
 	
 	var srvs = {};
 	
@@ -44,7 +46,10 @@ var services = (function () {
 
 		//Get new stories on program launch if connected to a good source
 		if(netStats.currentlyFetchable()) {
-			fetcher.fetchNews(20,function () {});
+			
+			fetcher.fetchNews(20,function () {
+				var n = new Notification("Muse", {body: "New stories have been loaded"});	
+			});
 		
 		}
 												
@@ -62,7 +67,7 @@ var services = (function () {
 
 
 		netCollect.activate(1);
-		ui.update();
+		
   };
 
 	//Helper function to create an alarm
@@ -94,6 +99,26 @@ var services = (function () {
 	
 	};
 	
+	srvs.refreshButton = function (callback) {
+		
+		if(netStats.currentlyFetchable()){
+			
+			
+			fetcher.fetchNews(20,function () {
+			  var n = new Notification("Muse", {body: "New stories have been loaded"});		
+			//	storyCache.clean(function(){
+					ui.update();				
+					callback();
+				//});
+				
+			});			
+			
+		}else{
+			var n = new Notification("Muse", {body: "No strong Internet connection"});
+			callback();
+		}
+		
+	};
 	
 	navigator.mozSetMessageHandler("alarm", function (alarm) {
 		
@@ -107,11 +132,14 @@ var services = (function () {
 
 		if(netStats.currentlyFetchable()) {
 
+			retryTimes = 0;
+			
 			fetcher.fetchNews(20,function () {
 				ui.update();
 				
 				setTimeout(function (){			
-					createAlarm(netStats.nextBestDate());							
+					var fetchTime = netStats.nextBestDate();
+					createAlarm(fetchTime.date);							
 
 				}, 10000); //We started early, wait until after collection time to ask for next best date
 
@@ -121,17 +149,22 @@ var services = (function () {
 			
 			//time to try again, 5 Minutes from now
 			d.setTime(d.getTime() + 300000);
+
+			var timeoutAlarm;
 			
-			//TODO: add counter so we can stop retrying after a few attempts. 
-			//Should call tryTomorrow if that happens
+			if(retryTimes < retryLimit){
+				retryTimes = retryTimes + 1;
+			  timeoutAlarm = navigator.mozAlarms.add(d, "ignoreTimezone", {});	
+			}else{
+				retryTimes = 0;
+				var fetchTime = netStats.nextBestDate();
+				createAlarm(fetchTime.date);							
+			}			
 			
-			var timeoutAlarm = navigator.mozAlarms.add(d, "ignoreTimezone", {});
 
 			timeoutAlarm.onsuccess = function () {
-				console.log("No Internet connection, trying again at: " + d.toString());
-				alarmId = this.result;
+				
 			};
-
 			timeoutAlarm.onerror = function () {
 				console.log("Unable to schedule fetcher: " + this.error.name);
 			};
@@ -143,5 +176,3 @@ var services = (function () {
 	return srvs;
 
 }());
-
-services.activate();

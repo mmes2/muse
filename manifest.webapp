@@ -27,14 +27,10 @@
     "device-storage:videos": {
       "access": "readwrite"
     },
-    "device-storage:music": {
-      "access": "readwrite"
-    },
     "device-storage:sdcard": {
       "access": "readwrite"
     },
-    "sms": {},
-    "telephony": {},
+    
     "browser": {},
     "bluetooth": {},
     "keyboard": {},
@@ -44,7 +40,6 @@
       "access": "readwrite"
     },
     "permissions": {},
-    "fmradio": {},
     "attention": {},
     "webapps-manage": {},
     "backgroundservice": {},
@@ -52,15 +47,13 @@
     "networkstats-manage": {},
     "wifi-manage": {},
     "systemXHR": {},
-    "voicemail": {},
-    "deprecated-hwvideo": {},
     "idle": {},
     "time": {},
     "embed-apps": {},
     "storage": {},
     "background-sensors": {}
   },
-  "chrome": { "navigation": true },
+  
   "messages": [
     {
       "alarm": "/index.html"

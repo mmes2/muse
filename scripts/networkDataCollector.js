@@ -299,13 +299,13 @@ var netCollect = (function() {
                              "DataReceived":collector.WifiDataReceived,
                              "DataSent":collector.WifiDataSent        
                            },
-                           Mobile:{
+                           "Mobile":{
                              "Connected":collector.MobileData,
                              "NetworkName":collector.MobileNetwork,
                              "Bandwidth":collector.MobileBandwidth,
                              "SignalStrength":collector.MobileSignalStrength,
-                             "DataReceived":0,
-                             "DataSent":0,
+                             "DataReceived":collector.MobileDataReceived,
+                             "DataSent":collector.MobileDataSent,
                              "Roaming":collector.MobileRoaming,
                              "Metered":collector.MobileMetered          
                            }

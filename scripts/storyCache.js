@@ -5,17 +5,13 @@ var storyCache = {
      So when being retrieve, the retrieve function MUST take care of these parts.
      @param { array of rss object} news   -  array containing rss object reprenting the rss news
      */
-    store: function (news, callback){
-        localforage.getItem("news", function(value){
-            if (value === null)
-                value = news;
-            else
-                value = value.concat(news);
-            localforage.setItem("news",value,function(value){
-                if (typeof (callback) =='function')
-                    callback();
-            });
-        })
+
+
+    storeStory: function (news, callback){
+        localforage.setItem(news.ts,news,function(value){
+            if (typeof (callback) =='function')
+                callback();
+        });
     },
     /**
      @function get the news from the storyCache in sorted order by pubdate.
@@ -25,39 +21,44 @@ var storyCache = {
      @param (function)callback( news) : function to execute with the news story from the story cache
 
      */
-    get: function (callback){
-        localforage.getItem("news", function(value){
-            var news;
-            //if the storyCache if empty
-            if (value === null)
-            {
-                news = value ;
+    getStory: function (id, callback){
 
-                callback(news);
-            }
-            //otherwise, sort the news, execute callback and store the result back to storyCache
-            else{
-                if (!(value  instanceof Array))
-                    throw "storyCache doesn't return array"
-                news = value;
-                news.sort(storyCache.compare);
-                var tmp = [];
-                var length = news.length;
-                for (var i = 0; i <length -1; i++)
-                {
-                    if (value[i].ts != value[i+1].ts)
-                        tmp.push(value[i]);
-                }
-                if (value[length -1].ts != tmp[tmp.length -1].ts )
-                    tmp.push( value[length-1]);
-                news = tmp;
-                if (typeof(callback)==='function')
-                    callback(news);
-                //store the sorted array back to storyCache
-                storyCache.overwrite(news);
-            }
-        })
+
+        localforage.getItem(id, function(value){
+
+            callback(value);        
+
+        });
     },
+    getStoryIds: function (callback){
+
+        localforage.keys(function(keys) {            
+            callback(keys.filter(notStory));   
+        });
+
+        var notStory = function (element){
+
+            /*This is a terrible hack. Both news stories 
+              and collection intervals seem to be stored 
+              in the same localforage database
+              TODO: Fix this!
+            */
+            if(element > 1400000000)  
+                return true;          
+            else                      
+                return false;
+        };
+
+    },
+
+    markAsRead: function(storyId){
+      localforage.getItem(storyId, function(value){
+         value.read = true;
+          localforage.setItem(value.ts, value, function(){});          
+      });
+        
+    },
+    
     /**
      * HELPER FUNCTIONS
      */
@@ -65,26 +66,38 @@ var storyCache = {
      @function empty the storyCache
      */
     empty: function (callback){
-        localforage.removeItem('news',function(){
+        storyCache.getStoryTimes(function (keys){
+            keys.forEach(function (key){
+                localforage.removeItem(key, function(){}); 
+            });
             console.log("cleared storyCache");
-            if (typeof(callback)==='function')
+            if (typeof (callback) =='function')
                 callback();
         });
-    },
-    /**
-     @function overwrite the sorted news back to storyCache by overwrite the old one.
-     */
-    overwrite: function (news){
-        localforage.removeItem('news',function(){
-            localforage.setItem("news",news,function(value){
-                console.log(value);
-            });
-        });
-    },
 
-    /**
-     *  @function sort news object based on pub date
-     */
+
+    },
+    //Maintain 100 news stories
+    clean: function(callback){
+        storyCache.getStoryIds(function (keys){
+
+            keys = keys.sort(function(a,b) {return b-a;});
+            
+            if(keys.length > 100){
+             
+                keys = keys.slice(0,100);
+                keys.forEach(function (key) {
+                    console.log("removed story");
+                    localforage.removeItem(key, function(){}); 
+                });
+            }
+            
+            if (typeof (callback) =='function')
+                callback();
+
+        });
+
+    },
     compare: function(a,b) {
         return b.ts - a.ts;
     }
