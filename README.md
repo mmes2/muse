@@ -47,7 +47,7 @@ TODO:
 
   Eliminate hackyness of user interface. It coulad probably be one html file if
   done correctly. Loading scripts just to call functions as a way to live without
-  the <script> tag seems wrong.
+  the script tag seems wrong.
 
 
 
