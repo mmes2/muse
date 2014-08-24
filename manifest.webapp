@@ -11,31 +11,15 @@
   },
   "permissions": {
     "geolocation": {},
-    "camera": {},
     "alarms": {},
-    "tcp-socket": {},
+    
     "network-events": {},
-    "contacts": {
-      "access": "readwrite"
-    },
     "device-storage:apps": {
       "access": "readwrite"
     },
-    "device-storage:pictures": {
-      "access": "readwrite"
-    },
-    "device-storage:videos": {
-      "access": "readwrite"
-    },
-    "device-storage:sdcard": {
-      "access": "readwrite"
-    },
-    
     "browser": {},
-    "bluetooth": {},
-    "keyboard": {},
     "mobileconnection": {},
-    "power": {},
+    
     "settings": {
       "access": "readwrite"
     },
@@ -49,7 +33,6 @@
     "systemXHR": {},
     "idle": {},
     "time": {},
-    "embed-apps": {},
     "storage": {},
     "background-sensors": {}
   },
