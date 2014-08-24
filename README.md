@@ -6,12 +6,21 @@ Firefox OS
 
 TODO:
 -----
-Finish this document
-Clean up manifest
-Find more types of expressions to parse out of saved news stories
-Get realistic collection data to build better analysis algorithms
-Implement location based analysis algorithms
-Consult current vs expected network conditions when assigning collection times
+  Finish this document
+  
+  Fix formatting on this document
+<br>
+  Clean up manifest
+  
+  Find more types of expressions to parse out of saved news stories
+  
+  Get realistic collection data to build better analysis algorithms
+  
+  Implement location based analysis algorithms
+  
+  Consult current vs expected network conditions when assigning collection times
+
+
 
 Known Issues:
 -------------
