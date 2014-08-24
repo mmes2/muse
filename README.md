@@ -4,9 +4,54 @@ Muse
 Portland State University Capstone Team D, 2014.  Muse News Reader for the 
 Firefox OS
 
+TODO:
+-----
+Finish this document
+Clean up manifest
+Find more types of expressions to parse out of saved news stories
+Get realistic collection data to build better analysis algorithms
+Implement location based analysis algorithms
+Consult current vs expected network conditions when assigning collection times
+
+Known Issues:
+-------------
+Some news sources, like the New York Times, do not display a news story when
+clicked, but a "Sign up to read" type message. Possible solution: Add a way for
+users to flag sources to blacklist
+
+The parsing done to remove unneeded sections of news stories works most of the
+time, but occasionally those filters will delete the story contents. Figure out
+what sources it happens to and figure out why.
+
 fetcher.js
 ---------------------
- -Nhan
+  This file could really use some refactoring! It's kind of just one big 
+  function.
+
+  The fetcher fetches news stories from the users localized version of Google 
+  news, then saves those stories in the storyCache for later use. 
+
+  fetchNews: function (num, callback)
+    'num' is the number of news stories to fetch
+    'callback' on completion 
+    fetchNews will store the news story in a javascript object with the 
+    following proprieties:
+
+      read: Boolean
+      title: The headline of the story
+      sourceName: Where the story came from
+      description: Currently unused, but holds interesting data
+      image: currently turned off, image url taken from description
+      category: Always 'Top Stories' on current configuration - room for growth! 
+      link: Link to source, used to get story
+      story: A string representing the news story. Through parsing with regular 
+      expressions the source articles html file, we eliminate a lot of the noise 
+      surrounding the body of the story. This will never be perfect and can 
+      always be better!!
+
+  convertDate: function(str)
+    Handy tool to convert a news stories published data into a time in seconds, 
+    which is also a unique database key where the story can be kept
 
 fetcherAnalysis.js
 ---------------------
@@ -14,7 +59,7 @@ fetcherAnalysis.js
   functions.
 
 
-MORE
+....
 
 
 genFakeMonth.js
@@ -138,6 +183,6 @@ tryTomorrow.js
  
 ui.js
 ---------------------
- -Chris
+ ......
  
  
