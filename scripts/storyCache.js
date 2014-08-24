@@ -66,7 +66,7 @@ var storyCache = {
      @function empty the storyCache
      */
     empty: function (callback){
-        storyCache.getStoryTimes(function (keys){
+        storyCache.getStoryIds(function (keys){
             keys.forEach(function (key){
                 localforage.removeItem(key, function(){}); 
             });

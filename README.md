@@ -4,13 +4,36 @@ Muse
 Portland State University Capstone Team D, 2014.  Muse News Reader for the 
 Firefox OS
 
+The Muse news reader is intended for use in developing countries where access
+to a stable Internet is a challenge. It tracks the users history of a stable 
+Internet connection and schedules batch fetches of news stories when it believes 
+a stable connection will be available. 
+
+Even away from an Internet connection, users are displayed a list of news 
+stories, and can read their full contents. The user can visually see what stories
+have been read by their light gray color on the story chooser screen.
+
+Pictures and links are stripped from every news story to allow for easier 
+off-line viewing. Up to 100 of the latest news stories will be stored on the 
+phone, although this number may be a lot less. Each time a batch fetch is 
+executed, it will retrieve 20 of the latest stories. Due to a currently unknown 
+issue, some stories may be fetched more than once, limiting the number of news 
+stories fetched during that cycle. 
+
+The user interface is equipped with a refresh button, which will check if conditions
+are suitable for a batch fetch of news stories, and activate the fetcher if they
+are. A message will be displayed to the user letting them know if their pressing
+of the refresh button resulted in new stories being loaded, or a decision that
+now is not a good time to try and fetch stories. 
+
+
 TODO:
 -----
   Finish this document
   
   Fix formatting on this document
 
-  Clean up manifest
+  Clean up manifest - A lot has been removed, more may need to be. Add descriptions to each permission
   
   Find more types of expressions to parse out of saved news stories
   
@@ -19,6 +42,12 @@ TODO:
   Implement location based analysis algorithms
   
   Consult current vs expected network conditions when assigning collection times
+
+  Refactor fetcher, it has grown too large
+
+  Eliminate hackyness of user interface. It coulad probably be one html file if
+  done correctly. Loading scripts just to call functions as a way to live without
+  the <script> tag seems wrong.
 
 
 
@@ -31,6 +60,7 @@ users to flag sources to blacklist
 The parsing done to remove unneeded sections of news stories works most of the
 time, but occasionally those filters will delete the story contents. Figure out
 what sources it happens to and figure out why.
+
 
 fetcher.js
 ---------------------
@@ -81,12 +111,41 @@ genFakeMonth.js
  
 networkAnalysis.js
 ---------------------
- -Randal
- 
- 
+ Overview:
+
+The network analysis module analyses the network statistics contained in the netStatsDB data base and predicts when the next best time to connect to a network is likely to be. Since during the development of this module we did not have access to a good data set and had to create fake data, the current default analyser is merely a place holder.  
+
+The code base provides a framework and interface for experimenting with different data analysis algorithms. The "analyzer" object can be replace at any time with a new one with a couple lines of code and a new analysis can be run. i.e. 
+
+  netStats.analyzer = myAnalyzer;
+
+  netStats.nextBestDate = myAnalyzer.nextBestDate;
+
+See "../test/netAnlysisTest.js" for example code of how to interface with the netStats object. 
+    
+
+To Do:
+
+Replace the default analyzer with something better, possibly fetcherAnalysis.js.
+
+  
 networkDatabase.js
 ---------------------
- -Randal
+Overview:
+The network data base module provides data storage for the networkDataCollector.js module and an interface for interacting with the data base. All data is stored in a single hierarchical JavaScript object. This object is stored in memory when the netStats.open() method is called. Calling netStats.save() or netStats.close() will store the current set of data to permanent memory using localforage.
+
+The data base is unusual in that it consists of queues. Each entry contains multiple data samples that were collected across multiple weeks. A key for an entry is derived from the day of the week - Sun, Mon, Tues, etc. - and the data collection time. i.e. key = "Monday 12:45". If one runs the collector for a month then there will be four entries for each key. The queue size defaults to four and can be changed by calling setQueueSize(). If the collector is run for a fith week then the first entry will be tossed. 
+
+For an example of the data structure for each record see genFakeMonth.js. Search for 'var add'. It should be around line 70. 
+
+Working:
+
+The interface is currently limited. There is netStats.addRecord() for adding records and netStats.getRecordsDay(day) for getting an array of records for the day, where day = new Date().getDay().
+
+To Do:
+
+It may be helpful to add methods for performing operations on the data such as min, max, select, sort, orderBy, etc.
+
 
 networkDataCollector.js
 ---------------------

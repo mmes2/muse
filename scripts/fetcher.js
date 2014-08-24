@@ -22,7 +22,7 @@ var fetcher = {
         $.get("http://ipinfo.io/json", function (data) {
             var country = data.country;
             //country = "br";// testing
-            country = "br";// testing
+            //country = "br";// testing
             //translate country code to google news edition code
             //Unfortunately, there is no programmactical way to do this. So if have time,
             // I'll come back to cover all the country that Firefox phone targets
@@ -66,12 +66,27 @@ var fetcher = {
                 $(data).find("item").each(function () { // or "item" or whatever suits your feed
                     var rss = {};
 
+                    
+                    /*IMPLEMENT THIS!
+                      it will make fetcher run faster, and prevent overwrite of
+                      stories, causing isRead information to be lost
+                    */
+                    ///storyCache.getStory(rss.ts, function(value){
+                     /// if(value === null || value === "undefined"){
+                      
+                    
+                    
+                    
                     rss.read = false;
                     
                     var el = $(this);
                     titleSource = el.find("title").text().split(" - ");;
-                    //rss.title = el.find("title").text();
+                    
 
+                    var pubDate = el.find("pubDate").text();
+                    rss.ts = fetcher.convertDate(pubDate);
+                    
+                    
                     rss.title = titleSource[0];
                     rss.sourceName = titleSource[1];
 
@@ -110,8 +125,7 @@ var fetcher = {
                     rss.description = desc;  //this is not used anymore, but may be later
 
                     rss.category = el.find("category").text();
-                    var pubDate = el.find("pubDate").text();
-                    rss.ts = fetcher.convertDate(pubDate);
+                    
 
                     rss.story = null;
                     rss.link = el.find("link").text();
