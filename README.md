@@ -9,7 +9,7 @@ TODO:
   Finish this document
   
   Fix formatting on this document
-<br>
+
   Clean up manifest
   
   Find more types of expressions to parse out of saved news stories
@@ -41,6 +41,7 @@ fetcher.js
   news, then saves those stories in the storyCache for later use. 
 
   fetchNews: function (num, callback)
+  
     'num' is the number of news stories to fetch
     'callback' on completion 
     fetchNews will store the news story in a javascript object with the 
@@ -59,6 +60,7 @@ fetcher.js
       always be better!!
 
   convertDate: function(str)
+  
     Handy tool to convert a news stories published data into a time in seconds, 
     which is also a unique database key where the story can be kept
 
@@ -91,10 +93,15 @@ networkDataCollector.js
  -The network data collector is started through the activate function, which 
   takes an integer as an argument. The argument represents a priority level the
   module should run at. They are defined as:
-   1: 12 collections an hour
-   2:  6 collections an hour 
-   3:  4 collections an hour
-   4:  2 collections an hour
+
+  1: 12 collections an hour
+  
+  2:  6 collections an hour 
+  
+  3:  4 collections an hour
+  
+  4:  2 collections an hour
+  
   5+:  1 collection  an hour
 
   For instance, on priority level 3, a collection will run at 2:00, 2:15, 2:30,
@@ -107,44 +114,73 @@ networkDataCollector.js
   The network data collector stores the following object in the database:
 
   { 
+  
     "Start": Time collection started,
+    
     "End": Time collection ended,
+    
     "Latitude": String,
+    
     "Longitude": String,
+    
     "Wifi":{
+    
                "Connected": Bool,
+               
                "NetworkName": String, 
+               
                "Bandwidth": Integer, measured in Mb/s, 
+               
                "SignalStrength": Integer, relative 0-100%,
+               
                "DataReceived": Integer, measured in b/s,
+               
                "DataSent": Integer, measured in b/s 
+               
            },
+           
     "Mobile":{
+    
                "Connected": Bool,
+               
                "NetworkName": String,
+               
                "Bandwidth": Integer, measured in Mb/s,
+               
                "SignalStrength": Integer, relative 0-100%,
+               
                "DataReceived": Integer, measured in b/s, 
+               
                "DataSent": Integer, measured in b/s,
+               
                "Roaming": Bool,
+               
                "Metered": Bool (Currently always true, no reliable way to tell)
+             
              }
+  
   }
   
   The network data collector depends on the following WebAPIs:
+
   navigator.mozNetworkStats,
+  
   navigator.mozWifiManager,
+  
   navigator.mozMobileConnections,
+  
   navigator.geolocation
 
   If any of these APIs change their interface, code in this module will need
   to be updated.
  
 services.js
- -Services sets the flow of control for the application. It starts the data 
+  
+  Services sets the flow of control for the application. It starts the data 
   collector through the activate function, initializes network analysis through
   the init function, and is the only place the update function in ui should be 
   run. 
+
 
   Services will do these initializations, then ask analysis for the next best
   time today a batch fetch might be successful. If such a date exists, services
