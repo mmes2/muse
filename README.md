@@ -49,7 +49,11 @@ TODO:
   done correctly. Loading scripts just to call functions as a way to live without
   the script tag seems wrong.
 
-
+  Some news stories come up blank, fix this
+  
+  Every news story should not be listed on the screen at once. It's making the interface slow, especially
+  on initial launch. About 10 should be loaded from cache, and if the user gets to the bottom of the screen, 10 more
+  should be loaded
 
 Known Issues:
 -------------
