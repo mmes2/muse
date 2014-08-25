@@ -4,8 +4,12 @@
 * This Source Code Form is subject to the terms of the Mozilla Public
 * License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
-* Description:    Analyses network statistics contains in networkDatabase.js and 
-* 				  determines the best times for fetching data from the Internet.
+* 
+* 
+* Description: Services provides a single interface for application developers. It hides
+* 	           implementation details of working with the fetcher, story cache, and the
+*              network analyzer.
+* 
 */
 
 // setup global services object
